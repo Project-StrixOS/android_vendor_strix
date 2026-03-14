@@ -16,8 +16,8 @@ strix_apply_patch() {
     # 文件名
     local name=$(basename "$patch_file")
 
-    # 去掉 .diff
-    name=${name%.diff}
+    # 去掉 .patch
+    name=${name%.patch}
 
     # _ 转 /
     local target=$(echo "$name" | tr '_' '/')
