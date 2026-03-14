@@ -1,0 +1,72 @@
+diff --git a/libsepol/cil/src/cil_write_ast.c b/libsepol/cil/src/cil_write_ast.c
+index f9edadba..50b20797 100644
+--- a/libsepol/cil/src/cil_write_ast.c
++++ b/libsepol/cil/src/cil_write_ast.c
+@@ -558,14 +558,14 @@ static const char *macro_param_flavor_to_string(enum cil_flavor flavor)
+ 
+ static void cil_write_src_info_node(FILE *out, struct cil_tree_node *node)
+ {
+-	struct cil_src_info *info = node->data;
++	/* struct cil_src_info *info = node->data;
+ 	if (info->kind == CIL_KEY_SRC_CIL || info->kind == CIL_KEY_SRC_HLL_LMS) {
+ 		fprintf(out, ";;* lms %u %s\n", info->hll_line, info->path);
+ 	} else if (info->kind == CIL_KEY_SRC_HLL_LMX) {
+ 		fprintf(out, ";;* lmx %u %s\n", info->hll_line, info->path);
+ 	} else {
+ 		fprintf(out, ";;* <?SRC_INFO_KIND> %u %s\n", info->hll_line, info->path);
+-	}
++	} */
+ }
+ 
+ void cil_write_ast_node(FILE *out, struct cil_tree_node *node)
+@@ -1623,11 +1623,11 @@ static int __write_cil_ast_node_helper(struct cil_tree_node *node, uint32_t *fin
+ 	struct cil_write_ast_args *args = extra_args;
+ 
+ 	if (node->flavor == CIL_SRC_INFO) {
+-		cil_write_src_info_node(args->out, node);
++		/* cil_write_src_info_node(args->out, node);
+ 
+ 		if (node->cl_head == NULL) {
+ 			fprintf(args->out, ";;* lme\n");
+-		}
++		} */
+ 		return SEPOL_OK;
+ 	}
+ 
+@@ -1662,7 +1662,7 @@ static int __write_cil_ast_last_child_helper(struct cil_tree_node *node, void *e
+ 	if (parent->flavor == CIL_ROOT) {
+ 		return SEPOL_OK;
+ 	} else if (parent->flavor == CIL_SRC_INFO) {
+-		fprintf(args->out, ";;* lme\n");
++		// fprintf(args->out, ";;* lme\n");
+ 		return SEPOL_OK;
+ 	}
+ 
+diff --git a/libsepol/src/module_to_cil.c b/libsepol/src/module_to_cil.c
+index 0eacddaa..f6cc60c1 100644
+--- a/libsepol/src/module_to_cil.c
++++ b/libsepol/src/module_to_cil.c
+@@ -1196,9 +1196,9 @@ static int avrule_list_to_cil(int indent, struct policydb *pdb, struct avrule *a
+ 	struct type_set *ts;
+ 
+ 	for (avrule = avrule_list; avrule != NULL; avrule = avrule->next) {
+-		if ((avrule->specified & pdb->line_marker_avrules) && avrule->source_filename) {
++		/* if ((avrule->specified & pdb->line_marker_avrules) && avrule->source_filename) {
+ 			cil_println(0, ";;* lmx %lu %s\n",avrule->source_line, avrule->source_filename);
+-		}
++		} */
+ 
+ 		ts = &avrule->stypes;
+ 		rc = process_typeset(pdb, ts, attr_list, &snames, &num_snames);
+@@ -1263,9 +1263,9 @@ static int avrule_list_to_cil(int indent, struct policydb *pdb, struct avrule *a
+ 		names_destroy(&snames, &num_snames);
+ 		names_destroy(&tnames, &num_tnames);
+ 
+-		if ((avrule->specified & pdb->line_marker_avrules) && avrule->source_filename) {
++		/* if ((avrule->specified & pdb->line_marker_avrules) && avrule->source_filename) {
+ 			cil_println(0, ";;* lme\n");
+-		}
++		} */
+ 	}
+ 
+ 	return 0;

@@ -1,0 +1,38 @@
+diff --git a/build/soong/mac_permissions.go b/build/soong/mac_permissions.go
+index 8d0ecc229..b6b7a4831 100644
+--- a/build/soong/mac_permissions.go
++++ b/build/soong/mac_permissions.go
+@@ -102,7 +102,7 @@ func (m *macPermissionsModule) GenerateAndroidBuildActions(ctx android.ModuleCon
+ 	rule := android.NewRuleBuilder(pctx, ctx)
+ 	rule.Command().
+ 		Tool(ctx.Config().PrebuiltBuildTool(ctx, "m4")).
+-		Text("--fatal-warnings -s").
++		Text("--fatal-warnings").
+ 		FlagForEachArg("-D", ctx.DeviceConfig().SepolicyM4Defs()).
+ 		Inputs(keys).
+ 		FlagWithOutput("> ", m4Keys).
+diff --git a/build/soong/policy.go b/build/soong/policy.go
+index 8359acd92..b4b1c23b9 100644
+--- a/build/soong/policy.go
++++ b/build/soong/policy.go
+@@ -273,7 +273,6 @@ func (c *policyConf) transformPolicyToConf(ctx android.ModuleContext) android.Ou
+ 		FlagWithArg("-D target_recovery=", strconv.FormatBool(c.isTargetRecovery())).
+ 		Flag(boardApiLevelToM4Macro(ctx, c.properties.Board_api_level)).
+ 		Flags(flagsToM4Macros(flags)).
+-		Flag("-s").
+ 		Inputs(srcs).
+ 		Text("> ").Output(conf)
+ 
+diff --git a/build/soong/selinux_contexts.go b/build/soong/selinux_contexts.go
+index d8f8bf922..8aac2d0c0 100644
+--- a/build/soong/selinux_contexts.go
++++ b/build/soong/selinux_contexts.go
+@@ -294,7 +294,7 @@ func (m *selinuxContextsModule) buildGeneralContexts(ctx android.ModuleContext,
+ 	flags := m.getBuildFlags(ctx)
+ 	rule.Command().
+ 		Tool(ctx.Config().PrebuiltBuildTool(ctx, "m4")).
+-		Text("--fatal-warnings -s").
++		Text("--fatal-warnings").
+ 		FlagForEachArg("-D", ctx.DeviceConfig().SepolicyM4Defs()).
+ 		Flag(boardApiLevelToM4Macro(ctx, m.properties.Board_api_level)).
+ 		Flags(flagsToM4Macros(flags)).
