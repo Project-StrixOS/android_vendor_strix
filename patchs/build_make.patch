@@ -1,0 +1,45 @@
+diff --git a/tools/releasetools/build_image.py b/tools/releasetools/build_image.py
+index 736d355468..15cd5b2a9e 100755
+--- a/tools/releasetools/build_image.py
++++ b/tools/releasetools/build_image.py
+@@ -39,6 +39,7 @@ import tempfile
+ import common
+ import verity_utils
+ 
++from xml.etree import ElementTree as ET
+ 
+ logger = logging.getLogger(__name__)
+ 
+@@ -515,6 +516,23 @@ def SetUUIDIfNotExist(image_props):
+   hash_seed = "hash_seed-" + uuid_seed
+   image_props["hash_seed"] = str(uuid.uuid5(uuid.NAMESPACE_URL, hash_seed))
+ 
++TARGET_DIRS = ["etc"]
++
++def strip_xml_comments(root):
++    for d in TARGET_DIRS:
++        p = os.path.join(root, d)
++        if not os.path.isdir(p):
++            continue
++        for dirpath, _, filenames in os.walk(p):
++            for name in filenames:
++                if name.endswith(".xml"):
++                    file = os.path.join(dirpath, name)
++                    try:
++                        parser = ET.XMLParser(target=ET.TreeBuilder(insert_comments=False))
++                        tree = ET.parse(file, parser)
++                        tree.write(file, encoding="utf-8")
++                    except:
++                        pass
+ 
+ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
+   """Builds an image for the files under in_dir and writes it to out_file.
+@@ -532,6 +550,8 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
+   Raises:
+     BuildImageError: On build image failures.
+   """
++  strip_xml_comments(in_dir)
++
+   in_dir, fs_config = SetUpInDirAndFsConfig(in_dir, prop_dict)
+   SetUUIDIfNotExist(prop_dict)
+ 

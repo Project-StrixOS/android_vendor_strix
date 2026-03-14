@@ -1,0 +1,1 @@
+echo "strix vendor vendorsetup.sh"

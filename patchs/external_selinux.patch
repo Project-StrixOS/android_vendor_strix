@@ -1,0 +1,36 @@
+diff --git a/libsepol/cil/src/cil_write_ast.c b/libsepol/cil/src/cil_write_ast.c
+index f9edadba..ea825533 100644
+--- a/libsepol/cil/src/cil_write_ast.c
++++ b/libsepol/cil/src/cil_write_ast.c
+@@ -560,11 +560,11 @@ static void cil_write_src_info_node(FILE *out, struct cil_tree_node *node)
+ {
+ 	struct cil_src_info *info = node->data;
+ 	if (info->kind == CIL_KEY_SRC_CIL || info->kind == CIL_KEY_SRC_HLL_LMS) {
+-		fprintf(out, ";;* lms %u %s\n", info->hll_line, info->path);
++		fprintf(out, ";;* lms %u device/xiaomi\n", info->hll_line);
+ 	} else if (info->kind == CIL_KEY_SRC_HLL_LMX) {
+-		fprintf(out, ";;* lmx %u %s\n", info->hll_line, info->path);
++		fprintf(out, ";;* lmx %u device/xiaomi\n", info->hll_line);
+ 	} else {
+-		fprintf(out, ";;* <?SRC_INFO_KIND> %u %s\n", info->hll_line, info->path);
++		fprintf(out, ";;* <?SRC_INFO_KIND> %u device/xiaomi\n", info->hll_line);
+ 	}
+ }
+ 
+diff --git a/libsepol/src/module_to_cil.c b/libsepol/src/module_to_cil.c
+index 0eacddaa..26d87d22 100644
+--- a/libsepol/src/module_to_cil.c
++++ b/libsepol/src/module_to_cil.c
+@@ -1196,9 +1196,9 @@ static int avrule_list_to_cil(int indent, struct policydb *pdb, struct avrule *a
+ 	struct type_set *ts;
+ 
+ 	for (avrule = avrule_list; avrule != NULL; avrule = avrule->next) {
+-		if ((avrule->specified & pdb->line_marker_avrules) && avrule->source_filename) {
+-			cil_println(0, ";;* lmx %lu %s\n",avrule->source_line, avrule->source_filename);
+-		}
++		 if ((avrule->specified & pdb->line_marker_avrules) && avrule->source_filename) {
++			cil_println(0, ";;* lmx %lu name\n",avrule->source_line);
++		} 
+ 
+ 		ts = &avrule->stypes;
+ 		rc = process_typeset(pdb, ts, attr_list, &snames, &num_snames);

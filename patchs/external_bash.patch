@@ -1,0 +1,13 @@
+diff --git a/etc/bashrc b/etc/bashrc
+index ce268eb..d6d7b3a 100644
+--- a/etc/bashrc
++++ b/etc/bashrc
+@@ -6,7 +6,7 @@
+ # anything or bad things will happen !
+ 
+ export HOME=/sdcard
+-export HOSTNAME=$(getprop ro.lineage.device)
++export HOSTNAME=localhost
+ export TERM=xterm
+ export TMPDIR=/data/local/tmp
+ export USER=$(id -un)
