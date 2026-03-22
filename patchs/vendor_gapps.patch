@@ -1,0 +1,13 @@
+diff --git a/common/Android.bp b/common/Android.bp
+index 2767d26..7377e9f 100644
+--- a/common/Android.bp
++++ b/common/Android.bp
+@@ -160,7 +160,7 @@ prebuilt_etc {
+     name: "gapps.rc",
+     src: "proprietary/product/etc/init/gapps.rc",
+     relative_install_path: "init",
+-    filename_from_src: true,
++    filename: "init.gms.rc",
+     product_specific: true,
+ }
+ 

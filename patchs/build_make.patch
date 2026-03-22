@@ -1,3 +1,16 @@
+diff --git a/core/build_rro_package.mk b/core/build_rro_package.mk
+index ae528bddc4..f27841d9b6 100644
+--- a/core/build_rro_package.mk
++++ b/core/build_rro_package.mk
+@@ -29,7 +29,7 @@ endif
+ ifeq ($(LOCAL_RRO_THEME),)
+   LOCAL_MODULE_PATH := $(partition)/overlay
+ else
+-  LOCAL_MODULE_PATH := $(partition)/overlay/$(LOCAL_RRO_THEME)
++  LOCAL_MODULE_PATH := $(partition)/overlay/$(subst Lineage,Strix,$(LOCAL_RRO_THEME))
+ endif
+ 
+ # Do not remove resources without default values nor dedupe resource
 diff --git a/tools/releasetools/build_image.py b/tools/releasetools/build_image.py
 index 736d355468..15cd5b2a9e 100755
 --- a/tools/releasetools/build_image.py
