@@ -1,0 +1,55 @@
+diff --git a/app/Android.bp b/app/Android.bp
+index 1500f12..5c90c7e 100644
+--- a/app/Android.bp
++++ b/app/Android.bp
+@@ -61,6 +61,10 @@ android_app {
+         proguard_flags_files: ["proguard-rules.pro"],
+         shrink_resources: true,
+     },
++
++    aaptflags: [
++        "--rename-manifest-package", "com.android.browser",
++    ],
+ }
+ 
+ prebuilt_etc {
+@@ -68,7 +72,7 @@ prebuilt_etc {
+     product_specific: true,
+     sub_dir: "sysconfig",
+     src: "initial-package-stopped-states-org.lineageos.jelly.xml",
+-    filename_from_src: true,
++    filename: "initial-package-stopped-states-org.los.jelly.xml",
+ }
+ 
+ prebuilt_etc {
+@@ -76,5 +80,5 @@ prebuilt_etc {
+     product_specific: true,
+     sub_dir: "sysconfig",
+     src: "preinstalled-packages-org.lineageos.jelly.xml",
+-    filename_from_src: true,
++    filename: "preinstalled-packages-org.los.jelly.xml",
+ }
+diff --git a/app/initial-package-stopped-states-org.lineageos.jelly.xml b/app/initial-package-stopped-states-org.lineageos.jelly.xml
+index 1757298..e806a1f 100644
+--- a/app/initial-package-stopped-states-org.lineageos.jelly.xml
++++ b/app/initial-package-stopped-states-org.lineageos.jelly.xml
+@@ -4,5 +4,5 @@
+      SPDX-License-Identifier: Apache-2.0
+ -->
+ <config>
+-    <initial-package-state package="org.lineageos.jelly" stopped="false"/>
++    <initial-package-state package="com.android.browser" stopped="false"/>
+ </config>
+diff --git a/app/preinstalled-packages-org.lineageos.jelly.xml b/app/preinstalled-packages-org.lineageos.jelly.xml
+index f595e67..ed4cfff 100644
+--- a/app/preinstalled-packages-org.lineageos.jelly.xml
++++ b/app/preinstalled-packages-org.lineageos.jelly.xml
+@@ -4,7 +4,7 @@
+      SPDX-License-Identifier: Apache-2.0
+ -->
+ <config>
+-    <install-in-user-type package="org.lineageos.jelly">
++    <install-in-user-type package="com.android.browser">
+         <install-in user-type="FULL" />
+         <install-in user-type="PROFILE" />
+         <do-not-install-in user-type="android.os.usertype.profile.CLONE" />

@@ -1,0 +1,38 @@
+diff --git a/Android.bp b/Android.bp
+index 4b8b737..b0433b4 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -19,7 +19,7 @@ android_app {
+ 
+     platform_apis: true,
+     privileged: true,
+-    privapp_allowlist: "org.lineageos.audiofx.xml",
++    privapp_allowlist: "org.los.audiofx.xml",
+     certificate: "platform",
+     system_ext_specific: true,
+ 
+@@ -29,4 +29,8 @@ android_app {
+         optimize: true,
+         shrink_resources: true,
+     },
++
++    aaptflags: [
++        "--rename-manifest-package", "com.android.audiofx",
++    ],
+ }
+diff --git a/org.lineageos.audiofx.xml b/org.los.audiofx.xml
+similarity index 87%
+rename from org.lineageos.audiofx.xml
+rename to org.los.audiofx.xml
+index 9c26028..cbc20a9 100644
+--- a/org.lineageos.audiofx.xml
++++ b/org.los.audiofx.xml
+@@ -4,7 +4,7 @@
+      SPDX-License-Identifier: Apache-2.0
+ -->
+ <permissions>
+-    <privapp-permissions package="org.lineageos.audiofx">
++    <privapp-permissions package="com.android.audiofx">
+         <permission name="android.permission.CHANGE_COMPONENT_ENABLED_STATE"/>
+         <permission name="android.permission.MEDIA_CONTENT_CONTROL"/>
+         <permission name="android.permission.MODIFY_AUDIO_ROUTING"/>
