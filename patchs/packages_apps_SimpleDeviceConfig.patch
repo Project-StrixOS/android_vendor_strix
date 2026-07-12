@@ -1,13 +1,13 @@
-diff --git a/AndroidManifest.xml b/AndroidManifest.xml
-index 928724f..036a040 100644
---- a/AndroidManifest.xml
-+++ b/AndroidManifest.xml
-@@ -4,7 +4,7 @@
-      SPDX-License-Identifier: Apache-2.0
- -->
- <manifest xmlns:android="http://schemas.android.com/apk/res/android"
--    package="org.protonaosp.deviceconfig">
-+    package="com.android.deviceconfig">
- 
-     <uses-permission android:name="android.permission.READ_DEVICE_CONFIG" />
-     <uses-permission android:name="android.permission.WRITE_DEVICE_CONFIG" />
+diff --git a/Android.bp b/Android.bp
+index 0cb8955..f62c921 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -12,4 +12,8 @@ android_app {
+     certificate: "platform",
+     privileged: true,
+     manifest: "AndroidManifest.xml",
++
++    aaptflags: [
++        "--rename-manifest-package", "com.android.deviceconfig",
++    ],
+ }
