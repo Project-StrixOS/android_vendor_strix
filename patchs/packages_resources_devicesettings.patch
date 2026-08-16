@@ -1,0 +1,13 @@
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+index b2d37101..07c7cb39 100644
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -15,7 +15,7 @@
+   -->
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+-    package="org.lineageos.settings.resources">
++    package="org.los.settings.resources">
+ 
+     <application android:hasCode="false" />
+ </manifest>

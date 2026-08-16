@@ -1,0 +1,12 @@
+iff --git a/res_override/values/override.xml b/res_override/values/override.xml
+index 42959c114d..ccaa6ca48c 100644
+--- a/res_override/values/override.xml
++++ b/res_override/values/override.xml
+@@ -40,6 +40,7 @@
+         <item>com.google.android.apps.docs</item>
+         <item>com.google.android.youtube</item>
+         <item>com.android.vending</item>
++        <item>org.strixos.glimpse</item>
+     </array>
+ 
+     <!-- Package name of the Camera app to be used when previewing icon shape and theme -->
