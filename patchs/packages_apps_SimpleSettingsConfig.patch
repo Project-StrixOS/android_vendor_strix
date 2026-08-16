@@ -1,0 +1,26 @@
+diff --git a/Android.bp b/Android.bp
+index 2615a1f..c3edfa2 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -25,4 +25,8 @@ android_app {
+     platform_apis: true,
+     certificate: "platform",
+     system_ext_specific: true,
++
++     aaptflags: [
++        "--rename-manifest-package", "com.android.settingsconfig",
++    ],
+ }
+diff --git a/src/org/lineageos/settingsconfig/BootReceiver.java b/src/org/lineageos/settingsconfig/BootReceiver.java
+index 4746325..aec4b13 100644
+--- a/src/org/lineageos/settingsconfig/BootReceiver.java
++++ b/src/org/lineageos/settingsconfig/BootReceiver.java
+@@ -23,7 +23,7 @@
+ import android.provider.Settings;
+ import android.util.Log;
+ 
+-import lineageos.providers.LineageSettings;
++import strixos.providers.LineageSettings;
+ 
+ import java.io.File;
+ import java.io.IOException;
