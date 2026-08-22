@@ -1,0 +1,13 @@
+diff --git a/qtitelephony-compat/AndroidManifest.xml b/qtitelephony-compat/AndroidManifest.xml
+index ed10d20..1f12de1 100644
+--- a/qtitelephony-compat/AndroidManifest.xml
++++ b/qtitelephony-compat/AndroidManifest.xml
+@@ -4,7 +4,7 @@
+      SPDX-License-Identifier: Apache-2.0
+ -->
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-    package="org.lineageos.qtitelephony.compat">
++    package="org.los.qtitelephony.compat">
+ 
+     <protected-broadcast android:name="org.codeaurora.intent.action.RADIO_POWER_STATE" />
+     <protected-broadcast android:name="org.codeaurora.intent.action.ESSENTIAL_RECORDS_LOADED" />
