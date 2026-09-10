@@ -1,0 +1,100 @@
+diff --git a/app/Android.bp b/app/Android.bp
+index 3f671c749..71e37e9e6 100644
+--- a/app/Android.bp
++++ b/app/Android.bp
+@@ -70,7 +70,7 @@ prebuilt_etc {
+     product_specific: true,
+     sub_dir: "sysconfig",
+     src: "org.lineageos.etar.allowlist.xml",
+-    filename_from_src: true,
++    filename: "org.strixos.etar.allowlist.xml",
+ }
+ 
+ prebuilt_etc {
+@@ -78,7 +78,7 @@ prebuilt_etc {
+     product_specific: true,
+     sub_dir: "sysconfig",
+     src: "initial-package-stopped-states-org.lineageos.etar.xml",
+-    filename_from_src: true,
++    filename: "initial-package-stopped-states-org.strixos.etar.xml",
+ }
+ 
+ prebuilt_etc {
+@@ -86,5 +86,5 @@ prebuilt_etc {
+     product_specific: true,
+     sub_dir: "sysconfig",
+     src: "preinstalled-packages-org.lineageos.etar.xml",
+-    filename_from_src: true,
++    filename: "preinstalled-packages-org.strixos.etar.xml",
+ }
+diff --git a/app/initial-package-stopped-states-org.lineageos.etar.xml b/app/initial-package-stopped-states-org.lineageos.etar.xml
+index 08785eda2..221daf84a 100644
+--- a/app/initial-package-stopped-states-org.lineageos.etar.xml
++++ b/app/initial-package-stopped-states-org.lineageos.etar.xml
+@@ -4,5 +4,5 @@
+      SPDX-License-Identifier: Apache-2.0
+ -->
+ <config>
+-    <initial-package-state package="org.lineageos.etar" stopped="false"/>
++    <initial-package-state package="org.strixos.etar" stopped="false"/>
+ </config>
+diff --git a/app/org.lineageos.etar.allowlist.xml b/app/org.lineageos.etar.allowlist.xml
+index ad0c111c9..747014f28 100644
+--- a/app/org.lineageos.etar.allowlist.xml
++++ b/app/org.lineageos.etar.allowlist.xml
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <config>
+     <!-- needed to be exempted from doze restrictions. -->
+-    <allow-in-power-save package="org.lineageos.etar" />
++    <allow-in-power-save package="org.strixos.etar" />
+ </config>
+diff --git a/app/preinstalled-packages-org.lineageos.etar.xml b/app/preinstalled-packages-org.lineageos.etar.xml
+index eca31287c..5a2d72bf4 100644
+--- a/app/preinstalled-packages-org.lineageos.etar.xml
++++ b/app/preinstalled-packages-org.lineageos.etar.xml
+@@ -4,7 +4,7 @@
+      SPDX-License-Identifier: Apache-2.0
+ -->
+ <config>
+-    <install-in-user-type package="org.lineageos.etar">
++    <install-in-user-type package="org.strixos.etar">
+         <install-in user-type="FULL" />
+         <install-in user-type="PROFILE" />
+         <do-not-install-in user-type="android.os.usertype.profile.CLONE" />
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+index a0a530e49..eb2d039b5 100644
+--- a/app/src/main/AndroidManifest.xml
++++ b/app/src/main/AndroidManifest.xml
+@@ -19,7 +19,7 @@
+ -->
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+-    package="org.lineageos.etar"
++    package="org.strixos.etar"
+     android:installLocation="auto">
+ 
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+diff --git a/app/src_aosp/main/java/ws/xsoh/etar/BuildConfig.java b/app/src_aosp/main/java/ws/xsoh/etar/BuildConfig.java
+index a26bdd1ce..5fee71a19 100644
+--- a/app/src_aosp/main/java/ws/xsoh/etar/BuildConfig.java
++++ b/app/src_aosp/main/java/ws/xsoh/etar/BuildConfig.java
+@@ -16,6 +16,6 @@
+ package ws.xsoh.etar;
+ 
+ public final class BuildConfig {
+-    public static final String APPLICATION_ID = "org.lineageos.etar";
++    public static final String APPLICATION_ID = "org.strixos.etar";
+     public static final boolean DEBUG = false;
+ }
+diff --git a/app/src_aosp/main/res/values/strings.xml b/app/src_aosp/main/res/values/strings.xml
+index 69add6e1f..2ca3241bc 100644
+--- a/app/src_aosp/main/res/values/strings.xml
++++ b/app/src_aosp/main/res/values/strings.xml
+@@ -4,5 +4,5 @@
+      SPDX-License-Identifier: Apache-2.0
+ -->
+ <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+-    <string name="search_authority" translatable="false">org.lineageos.etar.CalendarRecentSuggestionsProvider</string>
++    <string name="search_authority" translatable="false">org.strixos.etar.CalendarRecentSuggestionsProvider</string>
+ </resources>

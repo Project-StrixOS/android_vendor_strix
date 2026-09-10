@@ -1,0 +1,87 @@
+diff --git a/app/Android.bp b/app/Android.bp
+index 705525178..208cdd57d 100644
+--- a/app/Android.bp
++++ b/app/Android.bp
+@@ -92,6 +92,10 @@ android_app {
+         proguard_flags_files: ["proguard-rules.pro"],
+         shrink_resources: true,
+     },
++
++    aaptflags: [
++        "--rename-manifest-package", "org.strixos.twelve",
++    ],
+ }
+ 
+ prebuilt_etc {
+@@ -99,7 +103,7 @@ prebuilt_etc {
+     product_specific: true,
+     sub_dir: "sysconfig",
+     src: "initial-package-stopped-states-org.lineageos.twelve.xml",
+-    filename_from_src: true,
++    filename: "ipss_org.los.twelve.xml",
+ }
+ 
+ prebuilt_etc {
+@@ -107,5 +111,5 @@ prebuilt_etc {
+     product_specific: true,
+     sub_dir: "sysconfig",
+     src: "preinstalled-packages-org.lineageos.twelve.xml",
+-    filename_from_src: true,
++    filename: "pp_org.los.twelve.xml",
+ }
+diff --git a/app/initial-package-stopped-states-org.lineageos.twelve.xml b/app/initial-package-stopped-states-org.lineageos.twelve.xml
+index 8fa6fa30d..e6233affb 100644
+--- a/app/initial-package-stopped-states-org.lineageos.twelve.xml
++++ b/app/initial-package-stopped-states-org.lineageos.twelve.xml
+@@ -4,5 +4,5 @@
+      SPDX-License-Identifier: Apache-2.0
+ -->
+ <config>
+-    <initial-package-state package="org.lineageos.twelve" stopped="false"/>
++    <initial-package-state package="org.strixos.twelve" stopped="false"/>
+ </config>
+diff --git a/app/preinstalled-packages-org.lineageos.twelve.xml b/app/preinstalled-packages-org.lineageos.twelve.xml
+index 707b5447a..d1be508fe 100644
+--- a/app/preinstalled-packages-org.lineageos.twelve.xml
++++ b/app/preinstalled-packages-org.lineageos.twelve.xml
+@@ -4,7 +4,7 @@
+      SPDX-License-Identifier: Apache-2.0
+ -->
+ <config>
+-    <install-in-user-type package="org.lineageos.twelve">
++    <install-in-user-type package="org.strixos.twelve">
+         <install-in user-type="FULL" />
+         <install-in user-type="PROFILE" />
+         <do-not-install-in user-type="android.os.usertype.profile.CLONE" />
+
+From 14b93f2f5250efad07abc921954998d0ab49c4ed Mon Sep 17 00:00:00 2001
+From: strix <android@strixos.org>
+Date: Fri, 20 Mar 2026 23:04:56 +0000
+Subject: [PATCH 2/2] StrixOS
+
+---
+ app/Android.bp | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/app/Android.bp b/app/Android.bp
+index 71a212d3f..3575760c0 100644
+--- a/app/Android.bp
++++ b/app/Android.bp
+@@ -23,6 +23,7 @@ android_app {
+         "1.0",
+         "--version-code",
+         "1",
++        "--rename-manifest-package", "org.strixos.twelve",
+     ],
+ 
+     use_embedded_native_libs: true,
+@@ -99,9 +100,6 @@ android_app {
+         shrink_resources: true,
+     },
+ 
+-    aaptflags: [
+-        "--rename-manifest-package", "org.strixos.twelve",
+-    ],
+ }
+ 
+ prebuilt_etc {

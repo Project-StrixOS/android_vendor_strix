@@ -1,0 +1,99 @@
+diff --git a/customizations/BlackTheme/AndroidManifest.xml b/customizations/BlackTheme/AndroidManifest.xml
+index ff871596..04b47886 100644
+--- a/customizations/BlackTheme/AndroidManifest.xml
++++ b/customizations/BlackTheme/AndroidManifest.xml
+@@ -4,7 +4,7 @@
+  * SPDX-License-Identifier: Apache-2.0
+ -->
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-        package="org.lineageos.overlay.customization.blacktheme"
++        package="org.los.overlay.customization.blacktheme"
+         android:versionCode="1"
+         android:versionName="1.0">
+     <overlay android:targetPackage="android"
+diff --git a/fonts/FontGoogleSansFlexOverlay/AndroidManifest.xml b/fonts/FontGoogleSansFlexOverlay/AndroidManifest.xml
+index 525306a3..db151001 100644
+--- a/fonts/FontGoogleSansFlexOverlay/AndroidManifest.xml
++++ b/fonts/FontGoogleSansFlexOverlay/AndroidManifest.xml
+@@ -3,7 +3,7 @@
+     SPDX-License-Identifier: Apache-2.0
+ -->
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-    package="org.lineageos.overlay.font.googlesansflex"
++    package="org.strixos.overlay.font.googlesansflex"
+     android:versionCode="1"
+     android:versionName="1.0">
+ 
+diff --git a/fonts/FontLatoOverlay/AndroidManifest.xml b/fonts/FontLatoOverlay/AndroidManifest.xml
+index 6b502baa..3e695268 100644
+--- a/fonts/FontLatoOverlay/AndroidManifest.xml
++++ b/fonts/FontLatoOverlay/AndroidManifest.xml
+@@ -14,7 +14,7 @@
+     limitations under the License.
+ -->
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-    package="org.lineageos.overlay.font.lato"
++    package="org.los.overlay.font.lato"
+     android:versionCode="1"
+     android:versionName="1.0">
+ 
+diff --git a/fonts/FontRubikOverlay/AndroidManifest.xml b/fonts/FontRubikOverlay/AndroidManifest.xml
+index bc8b4edc..3624ffba 100644
+--- a/fonts/FontRubikOverlay/AndroidManifest.xml
++++ b/fonts/FontRubikOverlay/AndroidManifest.xml
+@@ -14,7 +14,7 @@
+     limitations under the License.
+ -->
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+-    package="org.lineageos.overlay.font.rubik"
++    package="org.los.overlay.font.rubik"
+     android:versionCode="1"
+     android:versionName="1.0">
+ 
+
+From 3e805d3cdd53a280ab9e17d6fcab2adc772c40b9 Mon Sep 17 00:00:00 2001
+From: strix <android@strixos.org>
+Date: Sat, 21 Mar 2026 11:11:00 +0000
+Subject: [PATCH 2/3] StrixOS
+
+---
+ customizations/BlackTheme/Android.bp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/customizations/BlackTheme/Android.bp b/customizations/BlackTheme/Android.bp
+index 1b135d33..dcc24649 100644
+--- a/customizations/BlackTheme/Android.bp
++++ b/customizations/BlackTheme/Android.bp
+@@ -4,8 +4,8 @@
+ //
+ 
+ runtime_resource_overlay {
+-    name: "LineageBlackTheme",
++    name: "AndroidBlackTheme",
+ 
+-    theme: "LineageBlackTheme",
++    theme: "AndroidBlackTheme",
+     product_specific: true,
+ }
+
+From 4f337d665be983937282cf2f99da337a647012c3 Mon Sep 17 00:00:00 2001
+From: strix <android@strixos.org>
+Date: Sat, 21 Mar 2026 11:12:21 +0000
+Subject: [PATCH 3/3] StrixOS
+
+---
+ customizations/BlackTheme/Android.bp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/customizations/BlackTheme/Android.bp b/customizations/BlackTheme/Android.bp
+index dcc24649..6e7524a8 100644
+--- a/customizations/BlackTheme/Android.bp
++++ b/customizations/BlackTheme/Android.bp
+@@ -6,6 +6,6 @@
+ runtime_resource_overlay {
+     name: "AndroidBlackTheme",
+ 
+-    theme: "AndroidBlackTheme",
++    theme: "LineageBlackTheme",
+     product_specific: true,
+ }

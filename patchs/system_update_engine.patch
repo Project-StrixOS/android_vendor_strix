@@ -1,0 +1,43 @@
+diff --git a/payload_consumer/postinstall_runner_action.cc b/payload_consumer/postinstall_runner_action.cc
+index 23f16e16..f4effe34 100644
+--- a/payload_consumer/postinstall_runner_action.cc
++++ b/payload_consumer/postinstall_runner_action.cc
+@@ -235,10 +235,10 @@ bool PostinstallRunnerAction::MountPartition(
+     }
+ 
+     // Run backuptool script
+-    int ret = system("/postinstall/system/bin/backuptool_postinstall.sh");
+-    if (ret == -1 || WEXITSTATUS(ret) != 0) {
+-      LOG(ERROR) << "Backuptool postinstall step failed. ret=" << ret;
+-    }
++    // int ret = system("/postinstall/system/bin/backuptool_postinstall.sh");
++    // if (ret == -1 || WEXITSTATUS(ret) != 0) {
++    //   LOG(ERROR) << "Backuptool postinstall step failed. ret=" << ret;
++    // }
+ 
+     // Switch back to update_engine domain
+     if (setexeccon(nullptr)) {
+
+From c33adad56779b4aa8b6162ed1066b1d989dfde0c Mon Sep 17 00:00:00 2001
+From: shuixx <shuixx@shuixx.com>
+Date: Sat, 31 Jan 2026 23:22:27 +0000
+Subject: [PATCH 2/2] StrixOS
+
+---
+ aosp/hardware_android.cc | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/aosp/hardware_android.cc b/aosp/hardware_android.cc
+index cd013475..070d24be 100644
+--- a/aosp/hardware_android.cc
++++ b/aosp/hardware_android.cc
+@@ -255,8 +255,7 @@ int64_t HardwareAndroid::GetBuildTimestamp() const {
+ // Returns true if the device runs an userdebug build, and explicitly allows OTA
+ // downgrade.
+ bool HardwareAndroid::AllowDowngrade() const {
+-  return GetBoolProperty("ro.ota.allow_downgrade", false) &&
+-         GetProperty("ro.build.type", "") != "user";
++  return GetBoolProperty("ro.ota.allow_downgrade", false);
+ }
+ 
+ bool HardwareAndroid::GetFirstActiveOmahaPingSent() const {

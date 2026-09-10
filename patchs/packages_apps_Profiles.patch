@@ -1,0 +1,67 @@
+diff --git a/Android.bp b/Android.bp
+index bbd0b5f..cc8fe19 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -23,6 +23,10 @@ android_app {
+     required: [
+         "default-permissions_org.lineageos.profiles",
+     ],
++
++    aaptflags: [
++        "--rename-manifest-package", "com.android.profiles",
++    ],
+ }
+ 
+ prebuilt_etc {
+@@ -30,5 +34,5 @@ prebuilt_etc {
+     system_ext_specific: true,
+     src: "default-permissions_org.lineageos.profiles.xml",
+     sub_dir: "default-permissions",
+-    filename_from_src: true,
++    filename: "dp_org.los.profiles.xml",
+ }
+diff --git a/default-permissions_org.lineageos.profiles.xml b/default-permissions_org.lineageos.profiles.xml
+index 51411fb..f935e83 100644
+--- a/default-permissions_org.lineageos.profiles.xml
++++ b/default-permissions_org.lineageos.profiles.xml
+@@ -4,7 +4,7 @@
+      SPDX-License-Identifier: Apache-2.0
+ -->
+ <exceptions>
+-    <exception package="org.lineageos.profiles">
++    <exception package="com.android.profiles">
+         <permission name="android.permission.BLUETOOTH_CONNECT" fixed="false"/>
+     </exception>
+ </exceptions>
+diff --git a/src/org/lineageos/profiles/ProfilePickerActivity.java b/src/org/lineageos/profiles/ProfilePickerActivity.java
+index 92becb5..3d0a40a 100644
+--- a/src/org/lineageos/profiles/ProfilePickerActivity.java
++++ b/src/org/lineageos/profiles/ProfilePickerActivity.java
+@@ -17,8 +17,8 @@
+ import android.widget.ListView;
+ import android.widget.TextView;
+ 
+-import lineageos.app.Profile;
+-import lineageos.app.ProfileManager;
++import strixos.app.Profile;
++import strixos.app.ProfileManager;
+ 
+ import com.android.internal.app.AlertActivity;
+ import com.android.internal.app.AlertController;
+diff --git a/src/org/lineageos/profiles/ProfilesTrustAgent.java b/src/org/lineageos/profiles/ProfilesTrustAgent.java
+index bec6532..63b4e40 100644
+--- a/src/org/lineageos/profiles/ProfilesTrustAgent.java
++++ b/src/org/lineageos/profiles/ProfilesTrustAgent.java
+@@ -24,9 +24,9 @@
+ import android.service.trust.TrustAgentService;
+ import android.util.ArraySet;
+ import android.util.Log;
+-import lineageos.app.Profile;
+-import lineageos.app.ProfileManager;
+-import lineageos.providers.LineageSettings;
++import strixos.app.Profile;
++import strixos.app.ProfileManager;
++import strixos.providers.LineageSettings;
+ 
+ import java.lang.ref.WeakReference;
+ import java.util.List;
