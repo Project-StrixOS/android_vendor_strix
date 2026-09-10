@@ -1,0 +1,44 @@
+diff --git a/Android.bp b/Android.bp
+index 7a3c89e..441a5a8 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -20,12 +20,16 @@ android_app {
+     required: [
+         "hidden-api-whitelist-org.lineageos.euicc.xml",
+     ],
++
++    aaptflags: [
++        "--rename-manifest-package", "org.strixos.euicc",
++    ],
+ }
+ 
+ prebuilt_etc {
+     name: "hidden-api-whitelist-org.lineageos.euicc.xml",
+     relative_install_path: "sysconfig",
+-    filename: "hidden-api-whitelist-org.lineageos.euicc.xml",
++    filename: "hidden-api-whitelist-org.strixos.euicc.xml",
+     src: "hidden-api-whitelist-org.lineageos.euicc.xml",
+     product_specific: true,
+ }
+diff --git a/hidden-api-whitelist-org.lineageos.euicc.xml b/hidden-api-whitelist-org.lineageos.euicc.xml
+index b3931ef..071503e 100644
+--- a/hidden-api-whitelist-org.lineageos.euicc.xml
++++ b/hidden-api-whitelist-org.lineageos.euicc.xml
+@@ -1,4 +1,4 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <config>
+-  <hidden-api-whitelisted-app package="org.lineageos.euicc" />
++  <hidden-api-whitelisted-app package="org.strixos.euicc" />
+ </config>
+diff --git a/org.lineageos.euicc.xml b/org.lineageos.euicc.xml
+index 3e65606..3d52e53 100644
+--- a/org.lineageos.euicc.xml
++++ b/org.lineageos.euicc.xml
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <permissions>
+-    <privapp-permissions package="org.lineageos.euicc">
++    <privapp-permissions package="org.strixos.euicc">
+         <permission name="android.permission.CHANGE_COMPONENT_ENABLED_STATE"/>
+         <permission name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS"/>
+     </privapp-permissions>
