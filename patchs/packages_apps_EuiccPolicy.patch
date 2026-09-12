@@ -21,21 +21,23 @@ index 7a3c89e..441a5a8 100644
      product_specific: true,
  }
 diff --git a/hidden-api-whitelist-org.lineageos.euicc.xml b/hidden-api-whitelist-org.lineageos.euicc.xml
-index b3931ef..071503e 100644
+index a9e84c3..f2b3d44 100644
 --- a/hidden-api-whitelist-org.lineageos.euicc.xml
 +++ b/hidden-api-whitelist-org.lineageos.euicc.xml
-@@ -1,4 +1,4 @@
- <?xml version="1.0" encoding="utf-8"?>
+@@ -4,5 +4,5 @@
+      SPDX-License-Identifier: Apache-2.0
+ -->
  <config>
 -  <hidden-api-whitelisted-app package="org.lineageos.euicc" />
 +  <hidden-api-whitelisted-app package="org.strixos.euicc" />
  </config>
 diff --git a/org.lineageos.euicc.xml b/org.lineageos.euicc.xml
-index 3e65606..3d52e53 100644
+index 0dba481..0c33b8c 100644
 --- a/org.lineageos.euicc.xml
 +++ b/org.lineageos.euicc.xml
-@@ -1,6 +1,6 @@
- <?xml version="1.0" encoding="utf-8"?>
+@@ -4,7 +4,7 @@
+      SPDX-License-Identifier: Apache-2.0
+ -->
  <permissions>
 -    <privapp-permissions package="org.lineageos.euicc">
 +    <privapp-permissions package="org.strixos.euicc">

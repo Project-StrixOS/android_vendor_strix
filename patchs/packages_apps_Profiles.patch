@@ -1,5 +1,5 @@
 diff --git a/Android.bp b/Android.bp
-index bbd0b5f..cc8fe19 100644
+index a341d4f..5e34d03 100644
 --- a/Android.bp
 +++ b/Android.bp
 @@ -23,6 +23,10 @@ android_app {
@@ -21,7 +21,7 @@ index bbd0b5f..cc8fe19 100644
 +    filename: "dp_org.los.profiles.xml",
  }
 diff --git a/default-permissions_org.lineageos.profiles.xml b/default-permissions_org.lineageos.profiles.xml
-index 51411fb..f935e83 100644
+index 0fb7bd2..85437f4 100644
 --- a/default-permissions_org.lineageos.profiles.xml
 +++ b/default-permissions_org.lineageos.profiles.xml
 @@ -4,7 +4,7 @@
@@ -37,7 +37,7 @@ diff --git a/src/org/lineageos/profiles/ProfilePickerActivity.java b/src/org/lin
 index 92becb5..3d0a40a 100644
 --- a/src/org/lineageos/profiles/ProfilePickerActivity.java
 +++ b/src/org/lineageos/profiles/ProfilePickerActivity.java
-@@ -17,8 +17,8 @@
+@@ -17,8 +17,8 @@ import android.widget.ArrayAdapter;
  import android.widget.ListView;
  import android.widget.TextView;
  
@@ -49,10 +49,10 @@ index 92becb5..3d0a40a 100644
  import com.android.internal.app.AlertActivity;
  import com.android.internal.app.AlertController;
 diff --git a/src/org/lineageos/profiles/ProfilesTrustAgent.java b/src/org/lineageos/profiles/ProfilesTrustAgent.java
-index bec6532..63b4e40 100644
+index 499887d..b26ed3a 100644
 --- a/src/org/lineageos/profiles/ProfilesTrustAgent.java
 +++ b/src/org/lineageos/profiles/ProfilesTrustAgent.java
-@@ -24,9 +24,9 @@
+@@ -24,9 +24,9 @@ import android.os.UserHandle;
  import android.service.trust.TrustAgentService;
  import android.util.ArraySet;
  import android.util.Log;

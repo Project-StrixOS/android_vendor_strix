@@ -1,5 +1,5 @@
-iff --git a/res_override/values/override.xml b/res_override/values/override.xml
-index 42959c114d..ccaa6ca48c 100644
+diff --git a/res_override/values/override.xml b/res_override/values/override.xml
+index 42959c114..ccaa6ca48 100644
 --- a/res_override/values/override.xml
 +++ b/res_override/values/override.xml
 @@ -40,6 +40,7 @@

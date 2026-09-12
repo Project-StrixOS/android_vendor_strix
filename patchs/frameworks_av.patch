@@ -1,19 +1,5 @@
-From c88064b829b52a6575d98e8c256386c55370fcc5 Mon Sep 17 00:00:00 2001
-From: WeiguangTWK <weiguangtwk@outlook.com>
-Date: Fri, 24 Jul 2026 12:26:04 +0800
-Subject: [PATCH] Neko LineageOS: [Anti Detection] Prevent private ABI exposed
- to 3rd party apps
-
-Some detector (e.g. Duck Detector) will check the exported symbols of libstagfright, which are judged as a
-sign of custom ROM
-
-Change-Id: I4a481c32a6ff2cb51ac905e598bf398435f65cbf
----
- media/libstagefright/exports.lds | 827 ++++++++++++-------------------
- 1 file changed, 321 insertions(+), 506 deletions(-)
-
 diff --git a/media/libstagefright/exports.lds b/media/libstagefright/exports.lds
-index ee38550..874df5b 100644
+index ee38550b9f..874df5b66a 100644
 --- a/media/libstagefright/exports.lds
 +++ b/media/libstagefright/exports.lds
 @@ -1,510 +1,325 @@
@@ -848,6 +834,3 @@ index ee38550..874df5b 100644
 -        ogg_sync_*;
 +        *;
  };
--- 
-2.43.0
-

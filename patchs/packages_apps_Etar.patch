@@ -1,8 +1,8 @@
 diff --git a/app/Android.bp b/app/Android.bp
-index 3f671c749..71e37e9e6 100644
+index 7f96d280..c2799442 100644
 --- a/app/Android.bp
 +++ b/app/Android.bp
-@@ -70,7 +70,7 @@ prebuilt_etc {
+@@ -75,7 +75,7 @@ prebuilt_etc {
      product_specific: true,
      sub_dir: "sysconfig",
      src: "org.lineageos.etar.allowlist.xml",
@@ -11,7 +11,7 @@ index 3f671c749..71e37e9e6 100644
  }
  
  prebuilt_etc {
-@@ -78,7 +78,7 @@ prebuilt_etc {
+@@ -83,7 +83,7 @@ prebuilt_etc {
      product_specific: true,
      sub_dir: "sysconfig",
      src: "initial-package-stopped-states-org.lineageos.etar.xml",
@@ -20,7 +20,7 @@ index 3f671c749..71e37e9e6 100644
  }
  
  prebuilt_etc {
-@@ -86,5 +86,5 @@ prebuilt_etc {
+@@ -91,5 +91,5 @@ prebuilt_etc {
      product_specific: true,
      sub_dir: "sysconfig",
      src: "preinstalled-packages-org.lineageos.etar.xml",
@@ -28,7 +28,7 @@ index 3f671c749..71e37e9e6 100644
 +    filename: "preinstalled-packages-org.strixos.etar.xml",
  }
 diff --git a/app/initial-package-stopped-states-org.lineageos.etar.xml b/app/initial-package-stopped-states-org.lineageos.etar.xml
-index 08785eda2..221daf84a 100644
+index 08785eda..221daf84 100644
 --- a/app/initial-package-stopped-states-org.lineageos.etar.xml
 +++ b/app/initial-package-stopped-states-org.lineageos.etar.xml
 @@ -4,5 +4,5 @@
@@ -39,7 +39,7 @@ index 08785eda2..221daf84a 100644
 +    <initial-package-state package="org.strixos.etar" stopped="false"/>
  </config>
 diff --git a/app/org.lineageos.etar.allowlist.xml b/app/org.lineageos.etar.allowlist.xml
-index ad0c111c9..747014f28 100644
+index ad0c111c..747014f2 100644
 --- a/app/org.lineageos.etar.allowlist.xml
 +++ b/app/org.lineageos.etar.allowlist.xml
 @@ -1,5 +1,5 @@
@@ -50,7 +50,7 @@ index ad0c111c9..747014f28 100644
 +    <allow-in-power-save package="org.strixos.etar" />
  </config>
 diff --git a/app/preinstalled-packages-org.lineageos.etar.xml b/app/preinstalled-packages-org.lineageos.etar.xml
-index eca31287c..5a2d72bf4 100644
+index eca31287..5a2d72bf 100644
 --- a/app/preinstalled-packages-org.lineageos.etar.xml
 +++ b/app/preinstalled-packages-org.lineageos.etar.xml
 @@ -4,7 +4,7 @@
@@ -63,7 +63,7 @@ index eca31287c..5a2d72bf4 100644
          <install-in user-type="PROFILE" />
          <do-not-install-in user-type="android.os.usertype.profile.CLONE" />
 diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
-index a0a530e49..eb2d039b5 100644
+index 55386dc6..759222f3 100644
 --- a/app/src/main/AndroidManifest.xml
 +++ b/app/src/main/AndroidManifest.xml
 @@ -19,7 +19,7 @@
@@ -74,9 +74,9 @@ index a0a530e49..eb2d039b5 100644
 +    package="org.strixos.etar"
      android:installLocation="auto">
  
-     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 diff --git a/app/src_aosp/main/java/ws/xsoh/etar/BuildConfig.java b/app/src_aosp/main/java/ws/xsoh/etar/BuildConfig.java
-index a26bdd1ce..5fee71a19 100644
+index a26bdd1c..5fee71a1 100644
 --- a/app/src_aosp/main/java/ws/xsoh/etar/BuildConfig.java
 +++ b/app/src_aosp/main/java/ws/xsoh/etar/BuildConfig.java
 @@ -16,6 +16,6 @@
@@ -88,7 +88,7 @@ index a26bdd1ce..5fee71a19 100644
      public static final boolean DEBUG = false;
  }
 diff --git a/app/src_aosp/main/res/values/strings.xml b/app/src_aosp/main/res/values/strings.xml
-index 69add6e1f..2ca3241bc 100644
+index 69add6e1..2ca3241b 100644
 --- a/app/src_aosp/main/res/values/strings.xml
 +++ b/app/src_aosp/main/res/values/strings.xml
 @@ -4,5 +4,5 @@

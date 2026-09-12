@@ -1,19 +1,19 @@
 diff --git a/app/Android.bp b/app/Android.bp
-index 738680ff..aaaaac16 100644
+index b24f014..02356e0 100644
 --- a/app/Android.bp
 +++ b/app/Android.bp
-@@ -69,6 +69,10 @@ android_app {
+@@ -70,6 +70,10 @@ android_app {
          proguard_flags_files: ["proguard-rules.pro"],
          shrink_resources: true,
      },
 +
 +    aaptflags: [
-+        "--rename-manifest-package", "com.android.camera",
++        "--rename-manifest-package", "com.android.aperture",
 +    ],
  }
  
  prebuilt_etc {
-@@ -76,7 +80,8 @@ prebuilt_etc {
+@@ -77,7 +81,8 @@ prebuilt_etc {
      product_specific: true,
      sub_dir: "sysconfig",
      src: "initial-package-stopped-states-org.lineageos.aperture.xml",
@@ -23,16 +23,15 @@ index 738680ff..aaaaac16 100644
  }
  
  prebuilt_etc {
-@@ -84,5 +89,6 @@ prebuilt_etc {
+@@ -85,5 +90,5 @@ prebuilt_etc {
      product_specific: true,
      sub_dir: "sysconfig",
      src: "preinstalled-packages-org.lineageos.aperture.xml",
 -    filename_from_src: true,
 +    filename: "pp_org.los.aperture.xml",
-+    //filename_from_src: true,
  }
 diff --git a/app/initial-package-stopped-states-org.lineageos.aperture.xml b/app/initial-package-stopped-states-org.lineageos.aperture.xml
-index c2339670..9caa2cb8 100644
+index 639037d..ad7473a 100644
 --- a/app/initial-package-stopped-states-org.lineageos.aperture.xml
 +++ b/app/initial-package-stopped-states-org.lineageos.aperture.xml
 @@ -4,5 +4,5 @@
@@ -40,10 +39,10 @@ index c2339670..9caa2cb8 100644
  -->
  <config>
 -    <initial-package-state package="org.lineageos.aperture" stopped="false"/>
-+    <initial-package-state package="com.android.camera" stopped="false"/>
++    <initial-package-state package="com.android.aperture" stopped="false"/>
  </config>
 diff --git a/app/preinstalled-packages-org.lineageos.aperture.xml b/app/preinstalled-packages-org.lineageos.aperture.xml
-index 84e84926..66da824c 100644
+index 1df2e88..acce21f 100644
 --- a/app/preinstalled-packages-org.lineageos.aperture.xml
 +++ b/app/preinstalled-packages-org.lineageos.aperture.xml
 @@ -4,7 +4,7 @@
@@ -51,25 +50,25 @@ index 84e84926..66da824c 100644
  -->
  <config>
 -    <install-in-user-type package="org.lineageos.aperture">
-+    <install-in-user-type package="com.android.camera">
++    <install-in-user-type package="com.android.aperture">
          <install-in user-type="FULL" />
          <install-in user-type="PROFILE" />
          <do-not-install-in user-type="android.os.usertype.profile.CLONE" />
 diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
-index e74bedd7..92af3fe9 100644
+index 639a85e..ff75343 100644
 --- a/app/src/main/AndroidManifest.xml
 +++ b/app/src/main/AndroidManifest.xml
 @@ -31,6 +31,8 @@
          <package android:name="com.google.android.googlequicksearchbox" />
          <package android:name="org.lineageos.aperture.auto_generated_rro_product__" />
          <package android:name="org.lineageos.aperture.auto_generated_rro_vendor__" />
-+        <package android:name="com.android.camera.auto_generated_rro_product__" />
-+        <package android:name="com.android.camera.auto_generated_rro_vendor__" />
++        <package android:name="com.android.aperture.auto_generated_rro_product__" />
++        <package android:name="com.android.aperture.auto_generated_rro_vendor__" />
      </queries>
  
      <application
 diff --git a/rro_overlays/ApertureFrameworksBaseOverlay/AndroidManifest.xml b/rro_overlays/ApertureFrameworksBaseOverlay/AndroidManifest.xml
-index 09a0a578..b06a7ea8 100644
+index 67325bc..ef0756d 100644
 --- a/rro_overlays/ApertureFrameworksBaseOverlay/AndroidManifest.xml
 +++ b/rro_overlays/ApertureFrameworksBaseOverlay/AndroidManifest.xml
 @@ -4,7 +4,7 @@
@@ -82,7 +81,7 @@ index 09a0a578..b06a7ea8 100644
      android:versionName="1.0">
  
 diff --git a/rro_overlays/ApertureFrameworksBaseOverlay/res/values/config.xml b/rro_overlays/ApertureFrameworksBaseOverlay/res/values/config.xml
-index 08c03ba0..77c8f592 100644
+index cd843da..38f988c 100644
 --- a/rro_overlays/ApertureFrameworksBaseOverlay/res/values/config.xml
 +++ b/rro_overlays/ApertureFrameworksBaseOverlay/res/values/config.xml
 @@ -5,5 +5,5 @@
@@ -90,102 +89,5 @@ index 08c03ba0..77c8f592 100644
  <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
      <!-- Default component for QR code scanner -->
 -    <string name="config_defaultQrCodeComponent" translatable="false">org.lineageos.aperture/.QrScannerActivity</string>
-+    <string name="config_defaultQrCodeComponent" translatable="false">com.android.camera/org.lineageos.aperture.QrScannerActivity</string>
- </resources>
-
-From 127cdb92b6b0d83b31e1bc9ece1e4f9d8bd812a1 Mon Sep 17 00:00:00 2001
-From: shuixx <shuixx@shuixx.com>
-Date: Sat, 24 Jan 2026 04:49:52 +0000
-Subject: [PATCH 2/3] StrixOS
-
----
- app/Android.bp | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/app/Android.bp b/app/Android.bp
-index aaaaac16..b27f3154 100644
---- a/app/Android.bp
-+++ b/app/Android.bp
-@@ -90,5 +90,4 @@ prebuilt_etc {
-     sub_dir: "sysconfig",
-     src: "preinstalled-packages-org.lineageos.aperture.xml",
-     filename: "pp_org.los.aperture.xml",
--    //filename_from_src: true,
- }
-
-From 265d26475b04f80522db9fc0fa9bbfbf4b0020e2 Mon Sep 17 00:00:00 2001
-From: strix <android@strixos.org>
-Date: Fri, 7 Aug 2026 23:11:09 +0000
-Subject: [PATCH 3/3] Rename lineage to avoid detection
-
----
- app/Android.bp                                                | 2 +-
- app/initial-package-stopped-states-org.lineageos.aperture.xml | 2 +-
- app/preinstalled-packages-org.lineageos.aperture.xml          | 2 +-
- app/src/main/AndroidManifest.xml                              | 4 ++--
- .../ApertureFrameworksBaseOverlay/res/values/config.xml       | 2 +-
- 5 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/app/Android.bp b/app/Android.bp
-index f328afdc..02356e09 100644
---- a/app/Android.bp
-+++ b/app/Android.bp
-@@ -72,7 +72,7 @@ android_app {
-     },
- 
-     aaptflags: [
--        "--rename-manifest-package", "com.android.camera",
-+        "--rename-manifest-package", "com.android.aperture",
-     ],
- }
- 
-diff --git a/app/initial-package-stopped-states-org.lineageos.aperture.xml b/app/initial-package-stopped-states-org.lineageos.aperture.xml
-index 6a7038f3..ad7473ab 100644
---- a/app/initial-package-stopped-states-org.lineageos.aperture.xml
-+++ b/app/initial-package-stopped-states-org.lineageos.aperture.xml
-@@ -4,5 +4,5 @@
-      SPDX-License-Identifier: Apache-2.0
- -->
- <config>
--    <initial-package-state package="com.android.camera" stopped="false"/>
-+    <initial-package-state package="com.android.aperture" stopped="false"/>
- </config>
-diff --git a/app/preinstalled-packages-org.lineageos.aperture.xml b/app/preinstalled-packages-org.lineageos.aperture.xml
-index c4c35734..acce21f0 100644
---- a/app/preinstalled-packages-org.lineageos.aperture.xml
-+++ b/app/preinstalled-packages-org.lineageos.aperture.xml
-@@ -4,7 +4,7 @@
-      SPDX-License-Identifier: Apache-2.0
- -->
- <config>
--    <install-in-user-type package="com.android.camera">
-+    <install-in-user-type package="com.android.aperture">
-         <install-in user-type="FULL" />
-         <install-in user-type="PROFILE" />
-         <do-not-install-in user-type="android.os.usertype.profile.CLONE" />
-diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
-index bf3fe9b6..ff75343b 100644
---- a/app/src/main/AndroidManifest.xml
-+++ b/app/src/main/AndroidManifest.xml
-@@ -31,8 +31,8 @@
-         <package android:name="com.google.android.googlequicksearchbox" />
-         <package android:name="org.lineageos.aperture.auto_generated_rro_product__" />
-         <package android:name="org.lineageos.aperture.auto_generated_rro_vendor__" />
--        <package android:name="com.android.camera.auto_generated_rro_product__" />
--        <package android:name="com.android.camera.auto_generated_rro_vendor__" />
-+        <package android:name="com.android.aperture.auto_generated_rro_product__" />
-+        <package android:name="com.android.aperture.auto_generated_rro_vendor__" />
-     </queries>
- 
-     <application
-diff --git a/rro_overlays/ApertureFrameworksBaseOverlay/res/values/config.xml b/rro_overlays/ApertureFrameworksBaseOverlay/res/values/config.xml
-index 3accdb60..38f988cc 100644
---- a/rro_overlays/ApertureFrameworksBaseOverlay/res/values/config.xml
-+++ b/rro_overlays/ApertureFrameworksBaseOverlay/res/values/config.xml
-@@ -5,5 +5,5 @@
- -->
- <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-     <!-- Default component for QR code scanner -->
--    <string name="config_defaultQrCodeComponent" translatable="false">com.android.camera/org.lineageos.aperture.QrScannerActivity</string>
 +    <string name="config_defaultQrCodeComponent" translatable="false">com.android.aperture/org.lineageos.aperture.QrScannerActivity</string>
  </resources>

@@ -1,5 +1,5 @@
 diff --git a/Android.bp b/Android.bp
-index d2d9553..05c5c6d 100644
+index bae686d..d9b1346 100644
 --- a/Android.bp
 +++ b/Android.bp
 @@ -12,4 +12,8 @@ android_app {

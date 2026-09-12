@@ -1,19 +1,24 @@
 diff --git a/app/Android.bp b/app/Android.bp
-index 289d002e..c5743f6f 100644
+index eb61716..aab74b3 100644
 --- a/app/Android.bp
 +++ b/app/Android.bp
-@@ -78,6 +78,10 @@ android_app {
+@@ -23,6 +23,7 @@ android_app {
+         "1.0",
+         "--version-code",
+         "1",
++        "--rename-manifest-package", "org.strixos.glimpse",
+     ],
+ 
+     use_embedded_native_libs: true,
+@@ -85,6 +86,7 @@ android_app {
          proguard_flags_files: ["proguard-rules.pro"],
          shrink_resources: true,
      },
 +
-+    aaptflags: [
-+        "--rename-manifest-package", "org.strixos.glimpse",
-+    ],
  }
  
  prebuilt_etc {
-@@ -85,7 +89,7 @@ prebuilt_etc {
+@@ -92,7 +94,7 @@ prebuilt_etc {
      product_specific: true,
      sub_dir: "sysconfig",
      src: "initial-package-stopped-states-org.lineageos.glimpse.xml",
@@ -22,7 +27,7 @@ index 289d002e..c5743f6f 100644
  }
  
  prebuilt_etc {
-@@ -93,5 +97,5 @@ prebuilt_etc {
+@@ -100,5 +102,5 @@ prebuilt_etc {
      product_specific: true,
      sub_dir: "sysconfig",
      src: "preinstalled-packages-org.lineageos.glimpse.xml",
@@ -30,7 +35,7 @@ index 289d002e..c5743f6f 100644
 +    filename: "preinstalled-packages-org.strixos.glimpse.xml",
  }
 diff --git a/app/initial-package-stopped-states-org.lineageos.glimpse.xml b/app/initial-package-stopped-states-org.lineageos.glimpse.xml
-index cb9c14a2..96861633 100644
+index 058d38e..d381ede 100644
 --- a/app/initial-package-stopped-states-org.lineageos.glimpse.xml
 +++ b/app/initial-package-stopped-states-org.lineageos.glimpse.xml
 @@ -4,5 +4,5 @@
@@ -41,7 +46,7 @@ index cb9c14a2..96861633 100644
 +    <initial-package-state package="org.strixos.glimpse" stopped="false"/>
  </config>
 diff --git a/app/preinstalled-packages-org.lineageos.glimpse.xml b/app/preinstalled-packages-org.lineageos.glimpse.xml
-index eb0eeba7..0d692f1d 100644
+index 59ae738..0082787 100644
 --- a/app/preinstalled-packages-org.lineageos.glimpse.xml
 +++ b/app/preinstalled-packages-org.lineageos.glimpse.xml
 @@ -4,7 +4,7 @@
@@ -53,26 +58,8 @@ index eb0eeba7..0d692f1d 100644
          <install-in user-type="FULL" />
          <install-in user-type="PROFILE" />
          <do-not-install-in user-type="android.os.usertype.profile.CLONE" />
-diff --git a/app/src/main/res/values-sc-rIT/strings.xml b/app/src/main/res/values-sc-rIT/strings.xml
-index 287a8acf..ea91aecd 100644
---- a/app/src/main/res/values-sc-rIT/strings.xml
-+++ b/app/src/main/res/values-sc-rIT/strings.xml
-@@ -9,6 +9,7 @@
-     <string name="reels_title">Reels</string>
-     <string name="albums_title">Albums</string>
-     <string name="categories_title">Categorias</string>
-+    <string name="library_title">Biblioteca</string>
-     <string name="album_favorites">Preferidos</string>
-     <string name="album_trash">Àliga</string>
-     <string name="album_reels">Reels</string>
-@@ -93,4 +94,5 @@
-     <string name="set_wallpaper_home_screen">Ischermu printzipale</string>
-     <string name="set_wallpaper_lock_screen">Ischermu de blocu</string>
-     <string name="set_wallpaper_both">Ischermu preintzipale e de blocu</string>
-+    <string name="warning_bin_time_period">Is archìvios ant a èssere cantzellados in manera permanente a pustis de 30 dies.</string>
- </resources>
 diff --git a/rro_overlays/GlimpseFrameworksBaseOverlay/AndroidManifest.xml b/rro_overlays/GlimpseFrameworksBaseOverlay/AndroidManifest.xml
-index fa7d5596..23a209f0 100644
+index 678e111..3a40a31 100644
 --- a/rro_overlays/GlimpseFrameworksBaseOverlay/AndroidManifest.xml
 +++ b/rro_overlays/GlimpseFrameworksBaseOverlay/AndroidManifest.xml
 @@ -4,7 +4,7 @@
@@ -85,7 +72,7 @@ index fa7d5596..23a209f0 100644
      android:versionName="1.0">
  
 diff --git a/rro_overlays/GlimpseFrameworksBaseOverlay/res/values/config.xml b/rro_overlays/GlimpseFrameworksBaseOverlay/res/values/config.xml
-index 1327c523..2b759355 100644
+index 007ad08..2d15254 100644
 --- a/rro_overlays/GlimpseFrameworksBaseOverlay/res/values/config.xml
 +++ b/rro_overlays/GlimpseFrameworksBaseOverlay/res/values/config.xml
 @@ -5,5 +5,5 @@
@@ -95,35 +82,3 @@ index 1327c523..2b759355 100644
 -    <string name="config_systemGallery" translatable="false">org.lineageos.glimpse</string>
 +    <string name="config_systemGallery" translatable="false">org.strixos.glimpse</string>
  </resources>
-
-From bd8c8a0959352f8e788dd2daff46f9a3a72b70bd Mon Sep 17 00:00:00 2001
-From: strix <android@strixos.org>
-Date: Fri, 10 Apr 2026 04:20:16 +0000
-Subject: [PATCH 2/2] StrixOS
-
----
- app/Android.bp | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/app/Android.bp b/app/Android.bp
-index 1927c85a..45b6d102 100644
---- a/app/Android.bp
-+++ b/app/Android.bp
-@@ -23,6 +23,7 @@ android_app {
-         "1.0",
-         "--version-code",
-         "1",
-+        "--rename-manifest-package", "org.strixos.glimpse",
-     ],
- 
-     use_embedded_native_libs: true,
-@@ -86,9 +87,6 @@ android_app {
-         shrink_resources: true,
-     },
- 
--    aaptflags: [
--        "--rename-manifest-package", "org.strixos.glimpse",
--    ],
- }
- 
- prebuilt_etc {

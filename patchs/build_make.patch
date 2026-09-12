@@ -12,7 +12,7 @@ index ae528bddc4..f27841d9b6 100644
  
  # Do not remove resources without default values nor dedupe resource
 diff --git a/tools/releasetools/build_image.py b/tools/releasetools/build_image.py
-index 736d355468..15cd5b2a9e 100755
+index 4d59ceee40..8a5382f27f 100755
 --- a/tools/releasetools/build_image.py
 +++ b/tools/releasetools/build_image.py
 @@ -39,6 +39,7 @@ import tempfile
@@ -23,7 +23,7 @@ index 736d355468..15cd5b2a9e 100755
  
  logger = logging.getLogger(__name__)
  
-@@ -515,6 +516,23 @@ def SetUUIDIfNotExist(image_props):
+@@ -506,6 +507,23 @@ def SetUUIDIfNotExist(image_props):
    hash_seed = "hash_seed-" + uuid_seed
    image_props["hash_seed"] = str(uuid.uuid5(uuid.NAMESPACE_URL, hash_seed))
  
@@ -45,9 +45,9 @@ index 736d355468..15cd5b2a9e 100755
 +                    except:
 +                        pass
  
- def BuildImage(in_dir, prop_dict, out_file, target_out=None):
+ def BuildImage(in_dir, prop_dict, out_file, target_out=None, otatools_dir=None):
    """Builds an image for the files under in_dir and writes it to out_file.
-@@ -532,6 +550,8 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
+@@ -523,6 +541,8 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None, otatools_dir=None):
    Raises:
      BuildImageError: On build image failures.
    """

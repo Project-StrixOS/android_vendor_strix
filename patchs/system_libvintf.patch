@@ -1,8 +1,8 @@
 diff --git a/AssembleVintf.cpp b/AssembleVintf.cpp
-index ddb513d..b01d4b4 100644
+index 34ffd10..1d5b142 100644
 --- a/AssembleVintf.cpp
 +++ b/AssembleVintf.cpp
-@@ -336,7 +336,7 @@ class AssembleVintfImpl : public AssembleVintf {
+@@ -334,7 +334,7 @@ class AssembleVintfImpl : public AssembleVintf {
          out() << "    Input:" << std::endl;
          for (const auto& e : inputs) {
              if (!e.fileName().empty()) {
