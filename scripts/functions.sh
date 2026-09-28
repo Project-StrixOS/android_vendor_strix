@@ -11,7 +11,8 @@ strix_apply_patch_if_needed() {
 
 
 strix_apply_patch() {
-    local patch_file="$1"
+    local root_path="$1"
+    local patch_file="$2"
 
     # 文件名
     local name=$(basename "$patch_file")
@@ -22,7 +23,7 @@ strix_apply_patch() {
     # _ 转 /
     local target=$(echo "$name" | tr '_' '/')
 
-    local target_dir="$ANDROID_BUILD_TOP/$target"
+    local target_dir="$root_path/$target"
 
     if [ ! -d "$target_dir" ]; then
         echo "Target dir not exist: $target_dir"
