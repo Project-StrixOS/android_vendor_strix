@@ -1,0 +1,12 @@
+diff --git a/app/Android.bp b/app/Android.bp
+index 5053a6a..8d76afb 100644
+--- a/app/Android.bp
++++ b/app/Android.bp
+@@ -23,6 +23,7 @@ android_app {
+         "1.0",
+         "--version-code",
+         "1",
++        "--rename-manifest-package", "com.android.app.canvas",
+     ],
+ 
+     use_embedded_native_libs: true,
