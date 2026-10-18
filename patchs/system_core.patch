@@ -1,0 +1,26 @@
+diff --git a/debuggerd/libdebuggerd/tombstone_proto.cpp b/debuggerd/libdebuggerd/tombstone_proto.cpp
+index e2c5c6d4e..5d84ce4fd 100644
+--- a/debuggerd/libdebuggerd/tombstone_proto.cpp
++++ b/debuggerd/libdebuggerd/tombstone_proto.cpp
+@@ -913,7 +913,7 @@ void engrave_tombstone_proto(Tombstone* tombstone, unwindstack::AndroidUnwinder*
+   } else {
+     result.set_guest_arch(Architecture::NONE);
+   }
+-  result.set_lineage_version(android::base::GetProperty("ro.lineage.version", "unknown"));
++  result.set_lineage_version(android::base::GetProperty("ro.los.version", "unknown"));
+   result.set_build_fingerprint(android::base::GetProperty("ro.build.fingerprint", "unknown"));
+   result.set_revision(android::base::GetProperty("ro.revision", "unknown"));
+   result.set_timestamp(get_timestamp());
+diff --git a/debuggerd/libdebuggerd/tombstone_proto_to_text.cpp b/debuggerd/libdebuggerd/tombstone_proto_to_text.cpp
+index 92c5912dc..6cedd0aa2 100644
+--- a/debuggerd/libdebuggerd/tombstone_proto_to_text.cpp
++++ b/debuggerd/libdebuggerd/tombstone_proto_to_text.cpp
+@@ -700,7 +700,7 @@ static void print_guest_thread(CallbackType callback, SymbolizeCallbackType symb
+ bool tombstone_proto_to_text(const Tombstone& tombstone, CallbackType callback,
+                              SymbolizeCallbackType symbolize, bool display_sp) {
+   CBL("*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***");
+-  CBL("LineageOS Version: '%s'", tombstone.lineage_version().c_str());
++  CBL("OS Version: '%s'", tombstone.lineage_version().c_str());
+   CBL("Build fingerprint: '%s'", tombstone.build_fingerprint().c_str());
+   if (!tombstone.kernel_release().empty()) {
+     CBL("Kernel Release: '%s'", tombstone.kernel_release().c_str());
