@@ -1,0 +1,554 @@
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+index e45bc1b23bf..3cbb74a92ff 100644
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -256,6 +256,15 @@
+             </intent-filter>
+         </receiver>
+ 
++        <receiver
++            android:name=".system.LogLevelBootReceiver"
++            android:enabled="true"
++            android:exported="true">
++            <intent-filter>
++                <action android:name="android.intent.action.BOOT_COMPLETED" />
++            </intent-filter>
++        </receiver>
++
+         <service
+             android:name=".development.PageAgnosticNotificationService"
+             android:enabled="true"
+diff --git a/res/drawable/ic_log_level.xml b/res/drawable/ic_log_level.xml
+new file mode 100644
+index 00000000000..eeca5b82f33
+--- /dev/null
++++ b/res/drawable/ic_log_level.xml
+@@ -0,0 +1,32 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!-- Copyright (C) 2026 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++<vector xmlns:android="http://schemas.android.com/apk/res/android"
++    android:width="24dp"
++    android:height="24dp"
++    android:viewportWidth="24"
++    android:viewportHeight="24"
++    android:tint="?android:attr/colorControlNormal">
++    <!-- Console window outline -->
++    <path
++        android:fillColor="#FFFFFFFF"
++        android:fillType="evenOdd"
++        android:pathData="M4,4h16a2,2 0 0 1 2,2v12a2,2 0 0 1 -2,2H4a2,2 0 0 1 -2,-2V6a2,2 0 0 1 2,-2z M5,6h14a1,1 0 0 1 1,1v10a1,1 0 0 1 -1,1H5a1,1 0 0 1 -1,-1V7a1,1 0 0 1 1,-1z" />
++    <!-- Prompt: >_ -->
++    <path
++        android:fillColor="#FFFFFFFF"
++        android:fillType="evenOdd"
++        android:pathData="M7,8L11,12L7,16L7,13.6L8.6,12L7,10.4z M12.5,11h4.5v2h-4.5z" />
++</vector>
+diff --git a/res/values-zh-rCN/strings.xml b/res/values-zh-rCN/strings.xml
+index 493a41b66eb..49391e23e3e 100644
+--- a/res/values-zh-rCN/strings.xml
++++ b/res/values-zh-rCN/strings.xml
+@@ -6234,4 +6234,24 @@
+     <!-- Ignore window secure -->
+     <string name="ignore_window_secure_title">"忽略窗口安全标志"</string>
+     <string name="ignore_window_secure_summary">"取消所有应用的截屏和录屏限制。这在某些情况下可能很方便，但可能会导致隐私泄露。"</string>
++
++    <!-- Log level settings -->
++    <!-- Title of the log level settings screen -->
++    <string name="log_level_settings_title">日志级别</string>
++    <!-- Summary of the log level entry on the System dashboard -->
++    <string name="log_level_settings_summary">选择系统写入日志的详细程度</string>
++    <!-- Log level that records everything -->
++    <string name="log_level_verbose">详细</string>
++    <!-- Log level for debugging information -->
++    <string name="log_level_debug">调试</string>
++    <!-- Log level for informational messages -->
++    <string name="log_level_info">信息</string>
++    <!-- Log level for warnings -->
++    <string name="log_level_warn">警告</string>
++    <!-- Log level for errors -->
++    <string name="log_level_error">错误</string>
++    <!-- Log level for fatal errors -->
++    <string name="log_level_fatal">致命</string>
++    <!-- Log level that records nothing -->
++    <string name="log_level_silent">静默</string>
+ </resources>
+diff --git a/res/values/strings.xml b/res/values/strings.xml
+index f859a3c2f8f..a5fd8f4520b 100644
+--- a/res/values/strings.xml
++++ b/res/values/strings.xml
+@@ -15593,4 +15593,24 @@
+     <!-- Ignore window secure -->
+     <string name="ignore_window_secure_title">Ignore window secure flags</string>
+     <string name="ignore_window_secure_summary">Remove screenshot and screenrecord limits for all apps. This can be convenient in some cases but may lead to privacy leaks.</string>
++
++    <!-- Log level settings -->
++    <!-- Title of the log level settings screen [CHAR LIMIT=40] -->
++    <string name="log_level_settings_title">Log level</string>
++    <!-- Summary of the log level entry on the System dashboard [CHAR LIMIT=NONE] -->
++    <string name="log_level_settings_summary">Choose how much detail the system writes to the logs</string>
++    <!-- Log level that records everything [CHAR LIMIT=30] -->
++    <string name="log_level_verbose">Verbose</string>
++    <!-- Log level for debugging information [CHAR LIMIT=30] -->
++    <string name="log_level_debug">Debug</string>
++    <!-- Log level for informational messages [CHAR LIMIT=30] -->
++    <string name="log_level_info">Info</string>
++    <!-- Log level for warnings [CHAR LIMIT=30] -->
++    <string name="log_level_warn">Warn</string>
++    <!-- Log level for errors [CHAR LIMIT=30] -->
++    <string name="log_level_error">Error</string>
++    <!-- Log level for fatal errors [CHAR LIMIT=30] -->
++    <string name="log_level_fatal">Fatal</string>
++    <!-- Log level that records nothing [CHAR LIMIT=30] -->
++    <string name="log_level_silent">Silent</string>
+ </resources>
+diff --git a/res/xml/log_level_settings.xml b/res/xml/log_level_settings.xml
+new file mode 100644
+index 00000000000..04d0a0c11ee
+--- /dev/null
++++ b/res/xml/log_level_settings.xml
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!-- Copyright (C) 2026 The Android Open Source Project
++
++     Licensed under the Apache License, Version 2.0 (the "License");
++     you may not use this file except in compliance with the License.
++     You may obtain a copy of the License at
++
++          http://www.apache.org/licenses/LICENSE-2.0
++
++     Unless required by applicable law or agreed to in writing, software
++     distributed under the License is distributed on an "AS IS" BASIS,
++     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++     See the License for the specific language governing permissions and
++     limitations under the License.
++-->
++
++<PreferenceScreen
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    android:key="log_level_settings"
++    android:title="@string/log_level_settings_title" />
+diff --git a/res/xml/system_dashboard_fragment.xml b/res/xml/system_dashboard_fragment.xml
+index 3dae93a4d86..e65de7499df 100644
+--- a/res/xml/system_dashboard_fragment.xml
++++ b/res/xml/system_dashboard_fragment.xml
+@@ -147,6 +147,14 @@
+             android:fragment="com.android.settings.users.UserSettings"
+             settings:controller="com.android.settings.users.MultiUserPreferenceController"/>
+ 
++        <Preference
++            android:key="log_level_settings"
++            android:title="@string/log_level_settings_title"
++            android:summary="@string/log_level_settings_summary"
++            android:icon="@drawable/ic_log_level"
++            android:fragment="com.android.settings.system.LogLevelSettings"
++            settings:controller="com.android.settings.system.LogLevelPreferenceController"/>
++
+     </PreferenceCategory>
+ 
+     <PreferenceCategory
+diff --git a/res/xml/system_dashboard_fragment_desktop.xml b/res/xml/system_dashboard_fragment_desktop.xml
+index e0cb8cf3813..330024bf20e 100644
+--- a/res/xml/system_dashboard_fragment_desktop.xml
++++ b/res/xml/system_dashboard_fragment_desktop.xml
+@@ -114,6 +114,14 @@
+             android:fragment="com.android.settings.users.UserSettings"
+             settings:controller="com.android.settings.users.MultiUserPreferenceController"/>
+ 
++        <Preference
++            android:key="log_level_settings"
++            android:title="@string/log_level_settings_title"
++            android:summary="@string/log_level_settings_summary"
++            android:icon="@drawable/ic_log_level"
++            android:fragment="com.android.settings.system.LogLevelSettings"
++            settings:controller="com.android.settings.system.LogLevelPreferenceController"/>
++
+     </PreferenceCategory>
+ 
+     <PreferenceCategory
+diff --git a/src/com/android/settings/system/LogLevelBootReceiver.java b/src/com/android/settings/system/LogLevelBootReceiver.java
+new file mode 100644
+index 00000000000..848b3db37ec
+--- /dev/null
++++ b/src/com/android/settings/system/LogLevelBootReceiver.java
+@@ -0,0 +1,45 @@
++/*
++ * Copyright (C) 2026 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package com.android.settings.system;
++
++import android.content.BroadcastReceiver;
++import android.content.Context;
++import android.content.Intent;
++import android.os.UserHandle;
++
++/**
++ * Re-applies the stored log level once boot has finished.
++ *
++ * <p>{@link LogLevelUtils#PROPERTY_LOG_LEVEL} is non-persistent, so it is absent from power-on up
++ * to this point and liblog lets every message through while the device boots. Writing the level
++ * the user picked before the reboot is what starts the filtering again.
++ *
++ * <p>Only the primary user performs that write: the property is global whereas the stored level
++ * lives in per-user preferences, so without this guard whichever user received the broadcast last
++ * would decide the level for the whole device.
++ */
++public class LogLevelBootReceiver extends BroadcastReceiver {
++
++    @Override
++    public void onReceive(Context context, Intent intent) {
++        if (UserHandle.myUserId() != UserHandle.USER_SYSTEM) {
++            return;
++        }
++
++        LogLevelUtils.applyStoredLevel(context);
++    }
++}
+diff --git a/src/com/android/settings/system/LogLevelPreferenceController.java b/src/com/android/settings/system/LogLevelPreferenceController.java
+new file mode 100644
+index 00000000000..1e2b3882dd8
+--- /dev/null
++++ b/src/com/android/settings/system/LogLevelPreferenceController.java
+@@ -0,0 +1,49 @@
++/*
++ * Copyright (C) 2026 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package com.android.settings.system;
++
++import android.content.Context;
++import android.os.UserHandle;
++
++import androidx.annotation.NonNull;
++
++import com.android.settings.core.BasePreferenceController;
++
++/**
++ * Shows the log level the user picked, as stored by {@link LogLevelUtils}.
++ */
++public class LogLevelPreferenceController extends BasePreferenceController {
++
++    public LogLevelPreferenceController(@NonNull Context context, @NonNull String preferenceKey) {
++        super(context, preferenceKey);
++    }
++
++    @Override
++    public int getAvailabilityStatus() {
++        // sys.strix.log_level is device global while the stored level is per user, so only the
++        // primary user is allowed to change it. DISABLED_FOR_USER is not part of
++        // isAvailable(), which keeps the entry hidden for everybody else.
++        return UserHandle.myUserId() == UserHandle.USER_SYSTEM
++                ? AVAILABLE
++                : DISABLED_FOR_USER;
++    }
++
++    @Override
++    public CharSequence getSummary() {
++        return LogLevelUtils.getLabel(mContext, LogLevelUtils.getLevel(mContext));
++    }
++}
+diff --git a/src/com/android/settings/system/LogLevelSettings.java b/src/com/android/settings/system/LogLevelSettings.java
+new file mode 100644
+index 00000000000..3a531f6219d
+--- /dev/null
++++ b/src/com/android/settings/system/LogLevelSettings.java
+@@ -0,0 +1,110 @@
++/*
++ * Copyright (C) 2026 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package com.android.settings.system;
++
++import android.app.settings.SettingsEnums;
++import android.graphics.drawable.Drawable;
++
++import androidx.annotation.NonNull;
++import androidx.annotation.Nullable;
++
++import com.android.settings.R;
++import com.android.settings.widget.RadioButtonPickerFragment;
++import com.android.settingslib.widget.CandidateInfo;
++
++import java.util.ArrayList;
++import java.util.List;
++
++/**
++ * Single choice page letting the user pick the system wide log level, which is stored by
++ * {@link LogLevelUtils} and published to {@link LogLevelUtils#PROPERTY_LOG_LEVEL}.
++ */
++public class LogLevelSettings extends RadioButtonPickerFragment {
++
++    @Override
++    public int getMetricsCategory() {
++        return SettingsEnums.SETTINGS_SYSTEM_CATEGORY;
++    }
++
++    @Override
++    protected int getPreferenceScreenResId() {
++        return R.xml.log_level_settings;
++    }
++
++    @Override
++    protected List<? extends CandidateInfo> getCandidates() {
++        final List<CandidateInfo> candidates = new ArrayList<>();
++        for (int level = LogLevelUtils.LEVEL_VERBOSE;
++                level <= LogLevelUtils.LEVEL_SILENT;
++                level++) {
++            candidates.add(new LogLevelCandidateInfo(
++                    LogLevelUtils.getLabel(getPrefContext(), level),
++                    String.valueOf(level)));
++        }
++        return candidates;
++    }
++
++    @Override
++    protected String getDefaultKey() {
++        return String.valueOf(LogLevelUtils.getLevel(getPrefContext()));
++    }
++
++    @Override
++    protected boolean setDefaultKey(String key) {
++        try {
++            return LogLevelUtils.setLevel(getPrefContext(), Integer.parseInt(key));
++        } catch (NumberFormatException e) {
++            return false;
++        }
++    }
++
++    @Override
++    protected void onSelectionPerformed(boolean success) {
++        super.onSelectionPerformed(success);
++
++        if (success && getActivity() != null) {
++            getActivity().finish();
++        }
++    }
++
++    private static final class LogLevelCandidateInfo extends CandidateInfo {
++        private final CharSequence mLabel;
++        private final String mKey;
++
++        LogLevelCandidateInfo(@NonNull CharSequence label, @NonNull String key) {
++            super(/* enabled */ true);
++            mLabel = label;
++            mKey = key;
++        }
++
++        @Override
++        public CharSequence loadLabel() {
++            return mLabel;
++        }
++
++        @Nullable
++        @Override
++        public Drawable loadIcon() {
++            return null;
++        }
++
++        @Override
++        public String getKey() {
++            return mKey;
++        }
++    }
++}
+diff --git a/src/com/android/settings/system/LogLevelUtils.java b/src/com/android/settings/system/LogLevelUtils.java
+new file mode 100644
+index 00000000000..2dab9b74d1b
+--- /dev/null
++++ b/src/com/android/settings/system/LogLevelUtils.java
+@@ -0,0 +1,146 @@
++/*
++ * Copyright (C) 2026 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package com.android.settings.system;
++
++import android.content.Context;
++import android.content.SharedPreferences;
++import android.os.SystemProperties;
++import android.os.UserHandle;
++import android.util.Log;
++
++import androidx.annotation.StringRes;
++
++import com.android.settings.R;
++
++/**
++ * Stores the log level the user picked and keeps {@link #PROPERTY_LOG_LEVEL} in sync with it.
++ *
++ * <p>The choice itself lives in {@link #PREFS_NAME} so that it survives a reboot, whereas
++ * {@link #PROPERTY_LOG_LEVEL} is deliberately non-persistent. That property therefore stays unset
++ * from power-on until {@link LogLevelBootReceiver} applies the stored choice after boot, which is
++ * what allows every log message through while the device is booting.
++ *
++ * <p>The value written to the property is the numeric {@link android.util.Log} priority of the
++ * lowest level that should be emitted, plus an extra {@link #LEVEL_SILENT} value on top of
++ * {@link #LEVEL_FATAL} that asks for no logging at all.
++ */
++public final class LogLevelUtils {
++
++    private static final String TAG = "LogLevelUtils";
++
++    /** SharedPreferences file holding the level the user picked. */
++    private static final String PREFS_NAME = "log_level";
++
++    /** Key of the level inside {@link #PREFS_NAME}. */
++    private static final String PREF_LEVEL = "level";
++
++    /**
++     * Non-persistent system property read by liblog to decide whether a message is written out.
++     * Nothing writes it during the boot sequence, so logging stays unrestricted until
++     * {@link LogLevelBootReceiver} runs.
++     */
++    public static final String PROPERTY_LOG_LEVEL = "sys.strix.log_level";
++
++    public static final int LEVEL_VERBOSE = 2;
++    public static final int LEVEL_DEBUG = 3;
++    public static final int LEVEL_INFO = 4;
++    public static final int LEVEL_WARN = 5;
++    public static final int LEVEL_ERROR = 6;
++    public static final int LEVEL_FATAL = 7;
++    public static final int LEVEL_SILENT = 8;
++
++    /** Level reported when the user has never made a choice. */
++    public static final int DEFAULT_LEVEL = LEVEL_VERBOSE;
++
++    private LogLevelUtils() {
++    }
++
++    private static SharedPreferences prefs(Context context) {
++        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
++    }
++
++    /** Returns the level the user picked, falling back to {@link #DEFAULT_LEVEL}. */
++    public static int getLevel(Context context) {
++        final int level = prefs(context).getInt(PREF_LEVEL, DEFAULT_LEVEL);
++        if (level >= LEVEL_VERBOSE && level <= LEVEL_SILENT) {
++            return level;
++        }
++        Log.w(TAG, "Ignoring an out of range stored log level: " + level);
++        return DEFAULT_LEVEL;
++    }
++
++    /**
++     * Stores {@code level} and applies it straight away, so the new filter takes effect without
++     * waiting for the next reboot.
++     *
++     * <p>Only the primary user may do this: the stored level is per user while
++     * {@link #PROPERTY_LOG_LEVEL} applies to the whole device.
++     */
++    public static boolean setLevel(Context context, int level) {
++        if (UserHandle.myUserId() != UserHandle.USER_SYSTEM) {
++            Log.w(TAG, "Refusing to change the log level from user " + UserHandle.myUserId());
++            return false;
++        }
++        if (level < LEVEL_VERBOSE || level > LEVEL_SILENT) {
++            Log.w(TAG, "Refusing to store an out of range log level: " + level);
++            return false;
++        }
++        prefs(context).edit().putInt(PREF_LEVEL, level).apply();
++        applyLevel(level);
++        return true;
++    }
++
++    /**
++     * Publishes the stored level into {@link #PROPERTY_LOG_LEVEL}. Called once boot has finished:
++     * the property is non-persistent and so is empty for the whole boot sequence, and this is what
++     * turns the filter on again after a reboot.
++     */
++    public static void applyStoredLevel(Context context) {
++        applyLevel(getLevel(context));
++    }
++
++    private static void applyLevel(int level) {
++        SystemProperties.set(PROPERTY_LOG_LEVEL, String.valueOf(level));
++    }
++
++    /** Returns the title resource describing {@code level}. */
++    @StringRes
++    public static int getLabelRes(int level) {
++        switch (level) {
++            case LEVEL_VERBOSE:
++                return R.string.log_level_verbose;
++            case LEVEL_DEBUG:
++                return R.string.log_level_debug;
++            case LEVEL_INFO:
++                return R.string.log_level_info;
++            case LEVEL_ERROR:
++                return R.string.log_level_error;
++            case LEVEL_FATAL:
++                return R.string.log_level_fatal;
++            case LEVEL_SILENT:
++                return R.string.log_level_silent;
++            case LEVEL_WARN:
++            default:
++                return R.string.log_level_warn;
++        }
++    }
++
++    /** Returns the translated title describing {@code level}. */
++    public static CharSequence getLabel(Context context, int level) {
++        return context.getText(getLabelRes(level));
++    }
++}

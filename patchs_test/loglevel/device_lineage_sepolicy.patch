@@ -1,0 +1,40 @@
+diff --git a/common/private/property.te b/common/private/property.te
+index 1829933..0bac7cf 100644
+--- a/common/private/property.te
++++ b/common/private/property.te
+@@ -10,3 +10,6 @@ system_internal_prop(custom_version_prop)
+ 
+ # Recovery update
+ system_internal_prop(recovery_update_prop)
++
++# Strix
++type strix_feature_prop, property_type, system_property_type;
+diff --git a/common/private/property_contexts b/common/private/property_contexts
+index 285df41..18d331b 100644
+--- a/common/private/property_contexts
++++ b/common/private/property_contexts
+@@ -52,3 +52,6 @@ persist.sysui.disable_mirroring_confirmation_dialog u:object_r:hdmi_config_prop:
+ # USB
+ ro.usb.uvc.disable_video_encode_flag   u:object_r:usb_uvc_config_prop:s0
+ vendor.usb.uvc.payload_transfer_size   u:object_r:usb_uvc_config_prop:s0
++
++# Strix
++sys.strix.    u:object_r:strix_feature_prop:s0
+diff --git a/common/private/strix.te b/common/private/strix.te
+new file mode 100644
+index 0000000..d087d60
+--- /dev/null
++++ b/common/private/strix.te
+@@ -0,0 +1 @@
++get_prop(domain, strix_feature_prop)
+diff --git a/common/private/system_app.te b/common/private/system_app.te
+index 755d2e6..ae159df 100644
+--- a/common/private/system_app.te
++++ b/common/private/system_app.te
+@@ -13,3 +13,6 @@ hal_client_domain(system_app, hal_strix_touch)
+ 
+ # Allow SetupWizard to set recovery update prop
+ set_prop(system_app, recovery_update_prop)
++
++# Strix
++set_prop(system_app, strix_feature_prop)

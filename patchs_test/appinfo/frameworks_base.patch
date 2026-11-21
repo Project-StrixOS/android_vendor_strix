@@ -1,0 +1,954 @@
+diff --git a/packages/PackageInstaller/res/layout/install_content_view.xml b/packages/PackageInstaller/res/layout/install_content_view.xml
+index fd8fb4312eb1..82c29dd38603 100644
+--- a/packages/PackageInstaller/res/layout/install_content_view.xml
++++ b/packages/PackageInstaller/res/layout/install_content_view.xml
+@@ -70,23 +70,49 @@
+ 
+   </LinearLayout>
+ 
+-  <TextView
+-      android:id="@+id/install_confirm_question"
++  <ScrollView
++      android:id="@+id/install_confirm_scroll"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+-      style="@android:style/TextAppearance.DeviceDefault.SearchResult.Subtitle"
+-      android:text="@string/install_confirm_question"
+-      android:visibility="invisible"
+-      android:scrollbars="vertical" />
++      android:scrollbars="vertical">
+ 
+-  <TextView
+-      android:id="@+id/install_confirm_question_update"
+-      android:layout_width="match_parent"
+-      android:layout_height="wrap_content"
+-      style="@android:style/TextAppearance.DeviceDefault.SearchResult.Subtitle"
+-      android:text="@string/install_confirm_question_update"
+-      android:visibility="invisible"
+-      android:scrollbars="vertical" />
++    <LinearLayout
++        android:id="@+id/install_confirm_panel"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:orientation="vertical">
++
++      <TextView
++          android:id="@+id/install_confirm_question"
++          android:layout_width="match_parent"
++          android:layout_height="wrap_content"
++          style="@android:style/TextAppearance.DeviceDefault.SearchResult.Subtitle"
++          android:text="@string/install_confirm_question"
++          android:visibility="gone"
++          android:scrollbars="vertical" />
++
++      <TextView
++          android:id="@+id/install_confirm_question_update"
++          android:layout_width="match_parent"
++          android:layout_height="wrap_content"
++          style="@android:style/TextAppearance.DeviceDefault.SearchResult.Subtitle"
++          android:text="@string/install_confirm_question_update"
++          android:visibility="gone"
++          android:scrollbars="vertical" />
++
++      <TextView
++          android:id="@+id/install_details"
++          android:layout_width="match_parent"
++          android:layout_height="wrap_content"
++          android:layout_marginTop="8dp"
++          style="@android:style/TextAppearance.DeviceDefault.SearchResult.Subtitle"
++          android:textSize="12sp"
++          android:typeface="monospace"
++          android:textIsSelectable="true"
++          android:visibility="gone" />
++
++    </LinearLayout>
++  </ScrollView>
+ 
+   <TextView
+       android:id="@+id/install_success"
+diff --git a/packages/PackageInstaller/res/layout/install_fragment_layout.xml b/packages/PackageInstaller/res/layout/install_fragment_layout.xml
+index 390b4116157b..afb0ce1bb002 100644
+--- a/packages/PackageInstaller/res/layout/install_fragment_layout.xml
++++ b/packages/PackageInstaller/res/layout/install_fragment_layout.xml
+@@ -58,6 +58,17 @@
+             android:layout_marginTop="@dimen/dialog_inter_element_margin"
+             android:visibility="gone" />
+ 
++        <TextView
++            android:id="@+id/install_details"
++            style="?attr/textAppearanceInstallerCustomMessage"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="@dimen/dialog_inter_element_margin"
++            android:textSize="12sp"
++            android:typeface="monospace"
++            android:textIsSelectable="true"
++            android:visibility="gone" />
++
+         <LinearLayout
+             android:id="@+id/more_details_clickable_layout"
+             android:layout_width="wrap_content"
+diff --git a/packages/PackageInstaller/res/layout/install_fragment_material_layout.xml b/packages/PackageInstaller/res/layout/install_fragment_material_layout.xml
+index 1063bee86f43..6a7339428c23 100644
+--- a/packages/PackageInstaller/res/layout/install_fragment_material_layout.xml
++++ b/packages/PackageInstaller/res/layout/install_fragment_material_layout.xml
+@@ -54,6 +54,17 @@
+             android:layout_marginTop="@dimen/dialog_inter_element_margin"
+             android:visibility="gone" />
+ 
++        <TextView
++            android:id="@+id/install_details"
++            style="?attr/textAppearanceInstallerCustomMessage"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="@dimen/dialog_inter_element_margin"
++            android:textSize="12sp"
++            android:typeface="monospace"
++            android:textIsSelectable="true"
++            android:visibility="gone" />
++
+         <LinearLayout
+             android:id="@+id/more_details_clickable_layout"
+             android:layout_width="wrap_content"
+diff --git a/packages/PackageInstaller/res/layout/uninstall_content_view.xml b/packages/PackageInstaller/res/layout/uninstall_content_view.xml
+index d5c5d8b986c6..06bcdcecbf6c 100644
+--- a/packages/PackageInstaller/res/layout/uninstall_content_view.xml
++++ b/packages/PackageInstaller/res/layout/uninstall_content_view.xml
+@@ -38,6 +38,17 @@
+             android:layout_height="wrap_content"
+             style="@android:style/TextAppearance.DeviceDefault.SearchResult.Subtitle" />
+ 
++        <TextView
++            android:id="@+id/install_details"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="8dp"
++            style="@android:style/TextAppearance.DeviceDefault.SearchResult.Subtitle"
++            android:textSize="12sp"
++            android:typeface="monospace"
++            android:textIsSelectable="true"
++            android:visibility="gone" />
++
+         <CheckBox
+             android:id="@+id/keepData"
+             android:layout_width="wrap_content"
+diff --git a/packages/PackageInstaller/res/layout/uninstall_fragment_layout.xml b/packages/PackageInstaller/res/layout/uninstall_fragment_layout.xml
+index ef1f4f2ee736..8bddf8baa3e0 100644
+--- a/packages/PackageInstaller/res/layout/uninstall_fragment_layout.xml
++++ b/packages/PackageInstaller/res/layout/uninstall_fragment_layout.xml
+@@ -37,6 +37,17 @@
+             android:textAlignment="viewStart"
+             android:visibility="gone" />
+ 
++        <TextView
++            android:id="@+id/install_details"
++            style="?attr/textAppearanceInstallerCustomMessage"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="@dimen/dialog_inter_element_margin"
++            android:textSize="12sp"
++            android:typeface="monospace"
++            android:textIsSelectable="true"
++            android:visibility="gone" />
++
+         <include layout="@layout/keep_data_option_layout" />
+ 
+     </LinearLayout>
+diff --git a/packages/PackageInstaller/res/values-zh-rCN/strings.xml b/packages/PackageInstaller/res/values-zh-rCN/strings.xml
+index a429756010cb..d12061d0d55f 100644
+--- a/packages/PackageInstaller/res/values-zh-rCN/strings.xml
++++ b/packages/PackageInstaller/res/values-zh-rCN/strings.xml
+@@ -130,4 +130,16 @@
+     <string name="unarchive_clear_storage_button" msgid="1549537154535608744">"清空存储空间"</string>
+     <string name="unarchive_settings_button" msgid="3504171760009177425">"设置"</string>
+     <string name="close" msgid="5214897374055647996">"关闭"</string>
++    <string name="install_details_header">"软件包详情"</string>
++    <string name="install_details_user">"用户"</string>
++    <string name="install_details_package">"包名"</string>
++    <string name="install_details_version">"版本"</string>
++    <string name="install_details_installed_version">"已安装"</string>
++    <string name="install_details_new_version">"新版本"</string>
++    <string name="install_details_target_sdk">"目标SDK"</string>
++    <string name="install_details_min_sdk">"最低SDK"</string>
++    <string name="install_details_uid">"UID"</string>
++    <string name="install_details_first_installed">"首次安装"</string>
++    <string name="install_details_last_updated">"最后更新"</string>
++    <string name="install_details_unknown">"未知"</string>
+ </resources>
+diff --git a/packages/PackageInstaller/res/values/strings.xml b/packages/PackageInstaller/res/values/strings.xml
+index 96bea97f40e1..9bce5f1b32e2 100644
+--- a/packages/PackageInstaller/res/values/strings.xml
++++ b/packages/PackageInstaller/res/values/strings.xml
+@@ -364,4 +364,31 @@
+     <!-- Dialog action to close a dialog. [CHAR LIMIT=30] -->
+     <string name="close">Close</string>
+ 
++    <!-- Header of the package details block that is shown underneath the question of the
++         install and uninstall confirmation dialogs. [CHAR LIMIT=40] -->
++    <string name="install_details_header">Package details</string>
++    <!-- Label for the user the package is installed for or removed from. [CHAR LIMIT=40] -->
++    <string name="install_details_user">User</string>
++    <!-- Label for the package name. [CHAR LIMIT=40] -->
++    <string name="install_details_package">Package</string>
++    <!-- Label for the version of a package that is about to be installed. [CHAR LIMIT=40] -->
++    <string name="install_details_version">Version</string>
++    <!-- Label for the version of the package that is currently installed. [CHAR LIMIT=40] -->
++    <string name="install_details_installed_version">Installed version</string>
++    <!-- Label for the version of the package that is about to be installed as an update.
++         [CHAR LIMIT=40] -->
++    <string name="install_details_new_version">New version</string>
++    <!-- Label for the SDK version the package targets. [CHAR LIMIT=40] -->
++    <string name="install_details_target_sdk">Target SDK</string>
++    <!-- Label for the lowest SDK version the package can run on. [CHAR LIMIT=40] -->
++    <string name="install_details_min_sdk">Minimum SDK</string>
++    <!-- Label for the numeric uid the package runs as. [CHAR LIMIT=40] -->
++    <string name="install_details_uid">UID</string>
++    <!-- Label for the first time the package was installed. [CHAR LIMIT=40] -->
++    <string name="install_details_first_installed">First installed</string>
++    <!-- Label for the last time the package was updated. [CHAR LIMIT=40] -->
++    <string name="install_details_last_updated">Last updated</string>
++    <!-- Value shown when a piece of package information cannot be determined. [CHAR LIMIT=40] -->
++    <string name="install_details_unknown">Unknown</string>
++
+ </resources>
+diff --git a/packages/PackageInstaller/src/com/android/packageinstaller/InstallDetailsUtil.java b/packages/PackageInstaller/src/com/android/packageinstaller/InstallDetailsUtil.java
+new file mode 100644
+index 000000000000..c2306f279ebb
+--- /dev/null
++++ b/packages/PackageInstaller/src/com/android/packageinstaller/InstallDetailsUtil.java
+@@ -0,0 +1,255 @@
++/*
++ * Copyright (C) 2026 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package com.android.packageinstaller;
++
++import android.content.Context;
++import android.content.pm.ApplicationInfo;
++import android.content.pm.PackageInfo;
++import android.content.pm.PackageManager;
++import android.graphics.Typeface;
++import android.os.Process;
++import android.os.UserHandle;
++import android.os.UserManager;
++import android.text.SpannableStringBuilder;
++import android.text.Spanned;
++import android.text.TextUtils;
++import android.text.style.StyleSpan;
++
++import androidx.annotation.NonNull;
++import androidx.annotation.Nullable;
++import androidx.annotation.StringRes;
++
++import java.text.DateFormat;
++import java.util.Date;
++
++/**
++ * Builds the block of package details that is displayed underneath the question of the install
++ * and the uninstall confirmation dialogs.
++ *
++ * <p>Only strings from the default (English) and the zh-rCN resources are used, every other
++ * locale falls back to English.
++ */
++public final class InstallDetailsUtil {
++
++    private InstallDetailsUtil() {
++    }
++
++    /**
++     * Builds the details shown while confirming an installation or an update.
++     *
++     * @param context used to resolve strings and to query the {@link PackageManager}
++     * @param newPackageInfo the package that is about to be installed, may be {@code null} when
++     *                       only little is known about it (e.g. a pre-commit session)
++     * @param installedPackageInfo the version of the package that is already installed or
++     *                            {@code null} when this is a fresh install
++     * @param user the user the package is installed for
++     * @return the details, never {@code null}
++     */
++    @NonNull
++    public static CharSequence buildInstallDetails(@NonNull Context context,
++            @Nullable PackageInfo newPackageInfo,
++            @Nullable PackageInfo installedPackageInfo,
++            @NonNull UserHandle user) {
++        final SpannableStringBuilder sb = new SpannableStringBuilder();
++        appendHeader(sb, context);
++        appendLine(sb, context, R.string.install_details_user, getUserLabel(context, user));
++
++        if (newPackageInfo == null) {
++            return sb;
++        }
++
++        appendLine(sb, context, R.string.install_details_package, newPackageInfo.packageName);
++
++        if (installedPackageInfo != null) {
++            appendLine(sb, context, R.string.install_details_installed_version,
++                    formatVersion(installedPackageInfo));
++            appendLine(sb, context, R.string.install_details_new_version,
++                    formatVersion(newPackageInfo));
++            appendLine(sb, context, R.string.install_details_target_sdk,
++                    arrow(formatTargetSdk(installedPackageInfo), formatTargetSdk(newPackageInfo)));
++        } else {
++            appendLine(sb, context, R.string.install_details_version,
++                    formatVersion(newPackageInfo));
++            appendLine(sb, context, R.string.install_details_target_sdk,
++                    formatTargetSdk(newPackageInfo));
++        }
++
++        appendCommonDetails(sb, context, newPackageInfo, installedPackageInfo);
++        return sb;
++    }
++
++    /**
++     * Builds the details shown while confirming an uninstallation.
++     *
++     * @param context used to resolve strings and to query the {@link PackageManager}
++     * @param packageInfo the package that is about to be removed
++     * @param user the user the package is removed from
++     * @return the details, never {@code null}
++     */
++    @NonNull
++    public static CharSequence buildUninstallDetails(@NonNull Context context,
++            @NonNull PackageInfo packageInfo,
++            @NonNull UserHandle user) {
++        final SpannableStringBuilder sb = new SpannableStringBuilder();
++        appendHeader(sb, context);
++        appendLine(sb, context, R.string.install_details_user, getUserLabel(context, user));
++        appendLine(sb, context, R.string.install_details_package, packageInfo.packageName);
++        appendLine(sb, context, R.string.install_details_version, formatVersion(packageInfo));
++        appendLine(sb, context, R.string.install_details_target_sdk,
++                formatTargetSdk(packageInfo));
++        appendCommonDetails(sb, context, packageInfo, packageInfo);
++        return sb;
++    }
++
++    /**
++     * Returns the {@link PackageInfo} of the currently installed version of {@code packageName},
++     * or {@code null} when the package is not installed (or only exists as data).
++     */
++    @Nullable
++    public static PackageInfo getInstalledPackageInfo(@NonNull Context context,
++            @NonNull String packageName) {
++        try {
++            final PackageInfo info = context.getPackageManager().getPackageInfo(packageName,
++                    PackageManager.PackageInfoFlags.of(
++                            PackageManager.MATCH_UNINSTALLED_PACKAGES
++                                    | PackageManager.MATCH_ARCHIVED_PACKAGES));
++            final ApplicationInfo appInfo = info.applicationInfo;
++            if (appInfo != null && !appInfo.isArchived
++                    && (appInfo.flags & ApplicationInfo.FLAG_INSTALLED) == 0) {
++                return null;
++            }
++            return info;
++        } catch (PackageManager.NameNotFoundException e) {
++            return null;
++        }
++    }
++
++    private static void appendCommonDetails(@NonNull SpannableStringBuilder sb,
++            @NonNull Context context, @NonNull PackageInfo packageInfo,
++            @Nullable PackageInfo installedPackageInfo) {
++        appendLine(sb, context, R.string.install_details_uid, formatUid(packageInfo));
++        appendLine(sb, context, R.string.install_details_min_sdk, formatMinSdk(packageInfo));
++
++        final PackageInfo timeSource = installedPackageInfo != null
++                ? installedPackageInfo : packageInfo;
++        appendLine(sb, context, R.string.install_details_first_installed,
++                formatTime(timeSource.firstInstallTime));
++        appendLine(sb, context, R.string.install_details_last_updated,
++                formatTime(timeSource.lastUpdateTime));
++    }
++
++    private static void appendHeader(@NonNull SpannableStringBuilder sb,
++            @NonNull Context context) {
++        final int start = sb.length();
++        sb.append(context.getString(R.string.install_details_header));
++        sb.setSpan(new StyleSpan(Typeface.BOLD), start, sb.length(),
++                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
++    }
++
++    private static void appendLine(@NonNull SpannableStringBuilder sb, @NonNull Context context,
++            @StringRes int labelRes, @Nullable String value) {
++        if (TextUtils.isEmpty(value)) {
++            return;
++        }
++        if (sb.length() > 0) {
++            sb.append("\n");
++        }
++        sb.append(context.getString(labelRes)).append(": ").append(value);
++    }
++
++    /** {@code "1.2.3 (10203)"} */
++    @Nullable
++    private static String formatVersion(@Nullable PackageInfo packageInfo) {
++        if (packageInfo == null) {
++            return null;
++        }
++        final String versionName = packageInfo.versionName;
++        final long versionCode = packageInfo.getLongVersionCode();
++        if (TextUtils.isEmpty(versionName)) {
++            return versionCode > 0 ? String.valueOf(versionCode) : null;
++        }
++        return versionCode > 0 ? versionName + " (" + versionCode + ")" : versionName;
++    }
++
++    @Nullable
++    private static String formatTargetSdk(@Nullable PackageInfo packageInfo) {
++        final ApplicationInfo appInfo = packageInfo != null ? packageInfo.applicationInfo : null;
++        if (appInfo == null || appInfo.targetSdkVersion <= 0) {
++            return null;
++        }
++        return String.valueOf(appInfo.targetSdkVersion);
++    }
++
++    @Nullable
++    private static String formatMinSdk(@Nullable PackageInfo packageInfo) {
++        final ApplicationInfo appInfo = packageInfo != null ? packageInfo.applicationInfo : null;
++        if (appInfo == null || appInfo.minSdkVersion <= 0) {
++            return null;
++        }
++        return String.valueOf(appInfo.minSdkVersion);
++    }
++
++    /** The numeric uid the package runs as, or {@code null} when it is not known yet. */
++    @Nullable
++    private static String formatUid(@Nullable PackageInfo packageInfo) {
++        final ApplicationInfo appInfo = packageInfo != null ? packageInfo.applicationInfo : null;
++        if (appInfo == null || appInfo.uid <= 0) {
++            return null;
++        }
++        return String.valueOf(appInfo.uid);
++    }
++
++    @Nullable
++    private static String arrow(@Nullable String oldValue, @Nullable String newValue) {
++        if (TextUtils.isEmpty(oldValue)) {
++            return newValue;
++        }
++        if (TextUtils.isEmpty(newValue)) {
++            return oldValue;
++        }
++        return oldValue + " \u2192 " + newValue;
++    }
++
++    @Nullable
++    private static String formatTime(long timeMillis) {
++        if (timeMillis <= 0) {
++            return null;
++        }
++        return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
++                .format(new Date(timeMillis));
++    }
++
++    /** {@code "Owner (0)"}, falling back to the user id when the name is not available. */
++    @NonNull
++    private static String getUserLabel(@NonNull Context context, @Nullable UserHandle user) {
++        final UserHandle targetUser = user != null ? user : Process.myUserHandle();
++        String name = null;
++        try {
++            final UserManager userManager = context.createContextAsUser(targetUser, 0)
++                    .getSystemService(UserManager.class);
++            if (userManager != null) {
++                name = userManager.getUserName();
++            }
++        } catch (RuntimeException e) {
++            // The user may not be readable from here, fall back to the id below.
++        }
++        if (TextUtils.isEmpty(name)) {
++            name = context.getString(R.string.install_details_unknown);
++        }
++        return name + " (" + targetUser.getIdentifier() + ")";
++    }
++}
+diff --git a/packages/PackageInstaller/src/com/android/packageinstaller/PackageInstallerActivity.java b/packages/PackageInstaller/src/com/android/packageinstaller/PackageInstallerActivity.java
+index 06132dbb4529..9274ba87b033 100644
+--- a/packages/PackageInstaller/src/com/android/packageinstaller/PackageInstallerActivity.java
++++ b/packages/PackageInstaller/src/com/android/packageinstaller/PackageInstallerActivity.java
+@@ -58,6 +58,7 @@ import android.widget.TextView;
+ import android.window.OnBackInvokedDispatcher;
+ 
+ import androidx.annotation.NonNull;
++import androidx.annotation.Nullable;
+ 
+ import java.io.File;
+ import java.util.ArrayList;
+@@ -151,8 +152,9 @@ public class PackageInstallerActivity extends Activity {
+ 
+     private void startInstallConfirm() {
+         TextView viewToEnable;
++        final boolean isUpdate = mAppInfo != null;
+ 
+-        if (mAppInfo != null) {
++        if (isUpdate) {
+             viewToEnable = mDialog.requireViewById(R.id.install_confirm_question_update);
+ 
+             final CharSequence existingUpdateOwnerLabel = getExistingUpdateOwnerLabel();
+@@ -175,14 +177,67 @@ public class PackageInstallerActivity extends Activity {
+             viewToEnable = mDialog.requireViewById(R.id.install_confirm_question);
+         }
+ 
++        // Both questions live in the same panel, only ever show one of them.
++        mDialog.requireViewById(R.id.install_confirm_question)
++                .setVisibility(isUpdate ? View.GONE : View.VISIBLE);
++        mDialog.requireViewById(R.id.install_confirm_question_update)
++                .setVisibility(isUpdate ? View.VISIBLE : View.GONE);
++
+         viewToEnable.setVisibility(View.VISIBLE);
+         viewToEnable.setMovementMethod(new ScrollingMovementMethod());
+ 
++        showInstallDetails();
++
+         mEnableOk = true;
+         mOk.setEnabled(true);
+         mOk.setFilterTouchesWhenObscured(true);
+     }
+ 
++    /**
++     * Fill in the block of package details that is shown underneath the confirmation question.
++     */
++    private void showInstallDetails() {
++        final TextView detailsView = mDialog.requireViewById(R.id.install_details);
++        final PackageInfo detailsPackageInfo = resolveDetailsPackageInfo();
++        if (detailsPackageInfo == null || TextUtils.isEmpty(detailsPackageInfo.packageName)) {
++            detailsView.setVisibility(View.GONE);
++            return;
++        }
++
++        final PackageInfo installedPackageInfo = mAppInfo != null
++                ? InstallDetailsUtil.getInstalledPackageInfo(this, detailsPackageInfo.packageName)
++                : null;
++        detailsView.setText(InstallDetailsUtil.buildInstallDetails(this, detailsPackageInfo,
++                installedPackageInfo, Process.myUserHandle()));
++        detailsView.setVisibility(View.VISIBLE);
++    }
++
++    /**
++     * Returns the package info used to render the details on the confirmation dialog. A
++     * pre-commit session only carries a stub, so try to read the manifest of the sealed session.
++     */
++    @Nullable
++    private PackageInfo resolveDetailsPackageInfo() {
++        if (mPkgInfo == null) {
++            return null;
++        }
++        final boolean isStub = mPkgInfo.applicationInfo == null
++                || (mPkgInfo.getLongVersionCode() <= 0 && TextUtils.isEmpty(mPkgInfo.versionName));
++        if (isStub && mSessionId != SessionInfo.INVALID_ID) {
++            final SessionInfo sessionInfo = mInstaller.getSessionInfo(mSessionId);
++            final String resolvedPath = sessionInfo != null
++                    ? sessionInfo.getResolvedBaseApkPath() : null;
++            if (!TextUtils.isEmpty(resolvedPath)) {
++                final PackageInfo parsed = PackageUtil.getPackageInfo(this, new File(resolvedPath),
++                        PackageManager.GET_PERMISSIONS);
++                if (parsed != null) {
++                    return parsed;
++                }
++            }
++        }
++        return mPkgInfo;
++    }
++
+     private CharSequence getExistingUpdateOwnerLabel() {
+         return getApplicationLabel(getExistingUpdateOwner());
+     }
+diff --git a/packages/PackageInstaller/src/com/android/packageinstaller/handheld/UninstallAlertDialogFragment.java b/packages/PackageInstaller/src/com/android/packageinstaller/handheld/UninstallAlertDialogFragment.java
+index 0e6785794611..ea83e5452b0a 100644
+--- a/packages/PackageInstaller/src/com/android/packageinstaller/handheld/UninstallAlertDialogFragment.java
++++ b/packages/PackageInstaller/src/com/android/packageinstaller/handheld/UninstallAlertDialogFragment.java
+@@ -35,6 +35,7 @@ import android.os.Process;
+ import android.os.SystemProperties;
+ import android.os.UserHandle;
+ import android.os.UserManager;
++import android.text.TextUtils;
+ import android.util.Log;
+ import android.view.LayoutInflater;
+ import android.view.View;
+@@ -46,6 +47,7 @@ import android.widget.TextView;
+ import androidx.annotation.NonNull;
+ import androidx.annotation.Nullable;
+ 
++import com.android.packageinstaller.InstallDetailsUtil;
+ import com.android.packageinstaller.R;
+ import com.android.packageinstaller.UninstallerActivity;
+ 
+@@ -225,11 +227,10 @@ public class UninstallAlertDialogFragment extends DialogFragment implements
+             appDataSize = getAppDataSize(pkg, dialogInfo.allUsers ? null : dialogInfo.user);
+         }
+ 
+-        if (appDataSize == 0) {
+-            dialogBuilder.setMessage(messageBuilder.toString());
+-        } else {
++        if (appDataSize > 0) {
+             LayoutInflater inflater = getContext().getSystemService(LayoutInflater.class);
+-            ViewGroup content = (ViewGroup) inflater.inflate(R.layout.uninstall_content_view, null);
++            ViewGroup content =
++                    (ViewGroup) inflater.inflate(R.layout.uninstall_content_view, null);
+ 
+             ((TextView) content.requireViewById(R.id.message)).setText(messageBuilder.toString());
+             mKeepData = content.requireViewById(R.id.keepData);
+@@ -237,12 +238,60 @@ public class UninstallAlertDialogFragment extends DialogFragment implements
+             mKeepData.setText(getString(R.string.uninstall_keep_data,
+                     formatFileSize(getContext(), appDataSize)));
+ 
++            showDetails(content, dialogInfo);
++
+             dialogBuilder.setView(content);
++        } else {
++            dialogBuilder.setMessage(appendDetailsToMessage(messageBuilder, dialogInfo));
+         }
+ 
+         return dialogBuilder.create();
+     }
+ 
++    /**
++     * Appends the package details to the plain text message used when the dialog does not need
++     * a custom view.
++     */
++    private CharSequence appendDetailsToMessage(@NonNull StringBuilder messageBuilder,
++            @NonNull UninstallerActivity.DialogInfo dialogInfo) {
++        final CharSequence details = buildDetails(dialogInfo);
++        if (details == null || details.length() == 0) {
++            return messageBuilder.toString();
++        }
++        return TextUtils.concat(messageBuilder, "\n\n", details);
++    }
++
++    /**
++     * Fill in the block of package details shown underneath the uninstall message.
++     */
++    private void showDetails(@NonNull ViewGroup content,
++            @NonNull UninstallerActivity.DialogInfo dialogInfo) {
++        final TextView detailsView = content.requireViewById(R.id.install_details);
++        final CharSequence details = buildDetails(dialogInfo);
++        if (details == null || details.length() == 0) {
++            detailsView.setVisibility(View.GONE);
++            return;
++        }
++        detailsView.setText(details);
++        detailsView.setVisibility(View.VISIBLE);
++    }
++
++    @Nullable
++    private CharSequence buildDetails(@NonNull UninstallerActivity.DialogInfo dialogInfo) {
++        final String packageName = dialogInfo.appInfo.packageName;
++        if (packageName == null) {
++            return null;
++        }
++        final PackageInfo packageInfo =
++                InstallDetailsUtil.getInstalledPackageInfo(getContext(), packageName);
++        if (packageInfo == null) {
++            return null;
++        }
++        final UserHandle targetUser = dialogInfo.user != null
++                ? dialogInfo.user : Process.myUserHandle();
++        return InstallDetailsUtil.buildUninstallDetails(getContext(), packageInfo, targetUser);
++    }
++
+     private static boolean isArchivingEnabled() {
+         return android.content.pm.Flags.archiving();
+     }
+diff --git a/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/InstallRepository.kt b/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/InstallRepository.kt
+index 49e24271482b..b05fa026ee37 100644
+--- a/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/InstallRepository.kt
++++ b/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/InstallRepository.kt
+@@ -146,6 +146,14 @@ class InstallRepository(private val context: Context) : EventResultPersister.Eve
+      * PackageInfo of the app being installed on device.
+      */
+     private var newPackageInfo: PackageInfo? = null
++
++    /**
++     * Parsed manifest of the package that is about to be installed. Usually the same as
++     * [newPackageInfo], but for a pre-commit session [newPackageInfo] is only a stub, so the
++     * manifest is read from the sealed session instead. Only used to render the package details
++     * on the install confirmation dialog.
++     */
++    private var detailsPackageInfo: PackageInfo? = null
+     private var wasUserConfirmationTriggeredByPia = false
+ 
+     /**
+@@ -765,12 +773,14 @@ class InstallRepository(private val context: Context) : EventResultPersister.Eve
+                 return InstallAborted(ABORT_REASON_INTERNAL_ERROR)
+             }
+         }
++        detailsPackageInfo = newPackageInfo
+         isAppUpdating = isAppUpdating(newPackageInfo)
+         val (existingUpdateOwner, requestedUpdateOwner) =
+             getUpdateOwners(newPackageInfo, userActionReason, isAppUpdating)
+ 
+         return InstallUserActionRequired(USER_ACTION_REASON_INSTALL_CONFIRMATION, appSnippet,
+-            isAppUpdating, existingUpdateOwner, requestedUpdateOwner)
++            isAppUpdating, existingUpdateOwner, requestedUpdateOwner,
++            detailsPackageInfo = detailsPackageInfo)
+     }
+ 
+     /**
+@@ -781,13 +791,19 @@ class InstallRepository(private val context: Context) : EventResultPersister.Eve
+      */
+     private fun processSessionInfo(sessionInfo: SessionInfo, userActionReason: Int): InstallStage {
+         newPackageInfo = generateStubPackageInfo(sessionInfo.getAppPackageName())
++        // The stub above only carries the package name. Read the manifest of the sealed session
++        // as well, so that the confirmation dialog can show the full package details.
++        detailsPackageInfo = sessionInfo.resolvedBaseApkPath?.let {
++            getPackageInfo(context, File(it), PackageManager.GET_PERMISSIONS)
++        } ?: newPackageInfo
+         appSnippet = getAppSnippet(context, sessionInfo)
+         isAppUpdating = isAppUpdating(newPackageInfo)
+         val (existingUpdateOwner, requestedUpdateOwner) =
+             getUpdateOwners(newPackageInfo, userActionReason, isAppUpdating)
+ 
+         return InstallUserActionRequired(USER_ACTION_REASON_INSTALL_CONFIRMATION, appSnippet,
+-            isAppUpdating, existingUpdateOwner, requestedUpdateOwner)
++            isAppUpdating, existingUpdateOwner, requestedUpdateOwner,
++            detailsPackageInfo = detailsPackageInfo)
+     }
+ 
+     private fun getUpdateOwners(
+diff --git a/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/InstallStages.kt b/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/InstallStages.kt
+index df4e980a8bce..a88376f1086f 100644
+--- a/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/InstallStages.kt
++++ b/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/InstallStages.kt
+@@ -19,6 +19,7 @@ package com.android.packageinstaller.v2.model
+ import android.app.Activity
+ import android.content.Context
+ import android.content.Intent
++import android.content.pm.PackageInfo
+ import android.content.pm.PackageInstaller
+ import android.content.pm.PackageManager
+ import android.graphics.drawable.Drawable
+@@ -53,6 +54,11 @@ data class InstallUserActionRequired(
+     val requestedUpdateOwnerPackageName: CharSequence? = null,
+     val unknownSourcePackageName: String? = null,
+     val verificationInfo: PackageInstaller.DeveloperVerificationUserConfirmationInfo? = null,
++    /**
++     * Parsed manifest of the package that is about to be installed, used to render the package
++     * details on the install confirmation dialog. Can be null when it could not be read.
++     */
++    val detailsPackageInfo: PackageInfo? = null,
+ ) : InstallStage(STAGE_USER_ACTION_REQUIRED) {
+ 
+     val appIcon: Drawable?
+diff --git a/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/UninstallRepository.kt b/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/UninstallRepository.kt
+index 6c34ad02e074..466782d9f241 100644
+--- a/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/UninstallRepository.kt
++++ b/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/UninstallRepository.kt
+@@ -360,7 +360,8 @@ class UninstallRepository(private val context: Context) {
+             isOtherUser,
+             userName,
+             targetAppInfo!!,
+-            targetActivityInfo
++            targetActivityInfo,
++            uninstalledUser
+         )
+     }
+ 
+diff --git a/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/UninstallStages.kt b/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/UninstallStages.kt
+index c2b2908c1051..d2447ffd83fd 100644
+--- a/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/UninstallStages.kt
++++ b/packages/PackageInstaller/src/com/android/packageinstaller/v2/model/UninstallStages.kt
+@@ -22,6 +22,7 @@ import android.content.Intent
+ import android.content.pm.ActivityInfo
+ import android.content.pm.ApplicationInfo
+ import android.graphics.drawable.Drawable
++import android.os.UserHandle
+ import com.android.packageinstaller.R
+ 
+ sealed class UninstallStage(val stageCode: Int) {
+@@ -50,6 +51,11 @@ data class UninstallUserActionRequired(
+     val userName: String? = null,
+     val targetAppInfo: ApplicationInfo,
+     val targetActivityInfo: ActivityInfo? = null,
++    /**
++     * The user the package is removed from. Used to render the package details on the uninstall
++     * confirmation dialog.
++     */
++    val targetUser: UserHandle? = null,
+ ) : UninstallStage(STAGE_USER_ACTION_REQUIRED) {
+ 
+     val appIcon: Drawable?
+diff --git a/packages/PackageInstaller/src/com/android/packageinstaller/v2/ui/fragments/InstallationFragment.java b/packages/PackageInstaller/src/com/android/packageinstaller/v2/ui/fragments/InstallationFragment.java
+index 9cd285258520..1e07cd4728bf 100644
+--- a/packages/PackageInstaller/src/com/android/packageinstaller/v2/ui/fragments/InstallationFragment.java
++++ b/packages/PackageInstaller/src/com/android/packageinstaller/v2/ui/fragments/InstallationFragment.java
+@@ -25,11 +25,13 @@ import android.app.Dialog;
+ import android.content.Context;
+ import android.content.DialogInterface;
+ import android.content.Intent;
++import android.content.pm.PackageInfo;
+ import android.content.pm.PackageInstaller;
+ import android.content.pm.ResolveInfo;
+ import android.graphics.Typeface;
+ import android.os.Build;
+ import android.os.Bundle;
++import android.os.Process;
+ import android.text.Html;
+ import android.text.method.LinkMovementMethod;
+ import android.util.Log;
+@@ -46,6 +48,7 @@ import androidx.annotation.RequiresApi;
+ import androidx.fragment.app.DialogFragment;
+ import androidx.lifecycle.ViewModelProvider;
+ 
++import com.android.packageinstaller.InstallDetailsUtil;
+ import com.android.packageinstaller.R;
+ import com.android.packageinstaller.v2.model.InstallAborted;
+ import com.android.packageinstaller.v2.model.InstallFailed;
+@@ -86,6 +89,7 @@ public class InstallationFragment extends DialogFragment {
+ 
+     private TextView mInstallWithoutVerifyingTextView = null;
+     private TextView mMoreDetailsExpandedTextView = null;
++    private TextView mInstallDetailsTextView = null;
+ 
+     @Override
+     public void onAttach(@NonNull Context context) {
+@@ -117,6 +121,7 @@ public class InstallationFragment extends DialogFragment {
+         mInstallWithoutVerifyingTextView = dialogView.requireViewById(
+                 R.id.install_without_verifying_text);
+         mMoreDetailsExpandedTextView = dialogView.requireViewById(R.id.more_details_expanded_text);
++        mInstallDetailsTextView = dialogView.requireViewById(R.id.install_details);
+ 
+         String title = getString(R.string.title_install_staging);
+         mDialog = UiUtil.getAlertDialog(requireContext(), title, dialogView,
+@@ -202,6 +207,9 @@ public class InstallationFragment extends DialogFragment {
+         mMoreDetailsClickableLayout.setVisibility(View.GONE);
+         mMoreDetailsExpandedLayout.setVisibility(View.GONE);
+ 
++        // hide the package details by default, they are only shown on the confirmation screen
++        mInstallDetailsTextView.setVisibility(View.GONE);
++
+         // Reset the paddings of the custom view panel
+         final int paddingHorizontal = mCustomViewPanel.getPaddingStart();
+         final int paddingTop = mCustomViewPanel.getPaddingTop();
+@@ -653,6 +661,8 @@ public class InstallationFragment extends DialogFragment {
+         }
+         dialog.setTitle(title);
+ 
++        showInstallDetails(installStage);
++
+         // Set the button and the listener
+         Button positiveButton = UiUtil.getAlertDialogPositiveButton(dialog);
+         if (positiveButton != null) {
+@@ -692,6 +702,26 @@ public class InstallationFragment extends DialogFragment {
+         }
+     }
+ 
++    /**
++     * Fill in the block of package details that is shown underneath the confirmation question.
++     */
++    private void showInstallDetails(@NonNull InstallUserActionRequired installStage) {
++        final PackageInfo newPackageInfo = installStage.getDetailsPackageInfo();
++        if (newPackageInfo == null || newPackageInfo.packageName == null) {
++            mInstallDetailsTextView.setVisibility(View.GONE);
++            return;
++        }
++
++        final Context context = requireContext();
++        final PackageInfo installedPackageInfo = installStage.isAppUpdating()
++                ? InstallDetailsUtil.getInstalledPackageInfo(context, newPackageInfo.packageName)
++                : null;
++
++        mInstallDetailsTextView.setText(InstallDetailsUtil.buildInstallDetails(context,
++                newPackageInfo, installedPackageInfo, Process.myUserHandle()));
++        mInstallDetailsTextView.setVisibility(View.VISIBLE);
++    }
++
+     /**
+      * Set the progress of the progress bar
+      */
+diff --git a/packages/PackageInstaller/src/com/android/packageinstaller/v2/ui/fragments/UninstallationFragment.java b/packages/PackageInstaller/src/com/android/packageinstaller/v2/ui/fragments/UninstallationFragment.java
+index 02064068dc09..6980e79289b5 100644
+--- a/packages/PackageInstaller/src/com/android/packageinstaller/v2/ui/fragments/UninstallationFragment.java
++++ b/packages/PackageInstaller/src/com/android/packageinstaller/v2/ui/fragments/UninstallationFragment.java
+@@ -21,7 +21,10 @@ import static android.text.format.Formatter.formatFileSize;
+ import android.app.Dialog;
+ import android.content.Context;
+ import android.content.DialogInterface;
++import android.content.pm.PackageInfo;
+ import android.os.Bundle;
++import android.os.Process;
++import android.os.UserHandle;
+ import android.util.Log;
+ import android.view.View;
+ import android.widget.Button;
+@@ -34,6 +37,7 @@ import androidx.annotation.Nullable;
+ import androidx.fragment.app.DialogFragment;
+ import androidx.lifecycle.ViewModelProvider;
+ 
++import com.android.packageinstaller.InstallDetailsUtil;
+ import com.android.packageinstaller.R;
+ import com.android.packageinstaller.v2.model.UninstallAborted;
+ import com.android.packageinstaller.v2.model.UninstallStage;
+@@ -58,6 +62,7 @@ public class UninstallationFragment extends DialogFragment {
+     private View mKeepDataLayout = null;
+     private TextView mCustomMessageTextView = null;
+     private TextView mKeepDataBytesTextView = null;
++    private TextView mInstallDetailsTextView = null;
+ 
+     @Override
+     public void onAttach(@NonNull Context context) {
+@@ -81,6 +86,7 @@ public class UninstallationFragment extends DialogFragment {
+         mKeepDataLayout = dialogView.requireViewById(R.id.keep_data_layout);
+         mKeepDataBytesTextView = mKeepDataLayout.requireViewById(R.id.keep_data_bytes);
+         mKeepDataCheckbox = mKeepDataLayout.requireViewById(R.id.keep_data_checkbox);
++        mInstallDetailsTextView = dialogView.requireViewById(R.id.install_details);
+ 
+         mDialog = UiUtil.getAlertDialog(requireContext(), getString(R.string.title_uninstall),
+                 dialogView, R.string.button_uninstall, R.string.button_cancel,
+@@ -133,6 +139,7 @@ public class UninstallationFragment extends DialogFragment {
+     private void updateUninstallAbortedUI(Dialog dialog, UninstallAborted uninstallStage) {
+         mKeepDataLayout.setVisibility(View.GONE);
+         mCustomMessageTextView.setVisibility(View.VISIBLE);
++        mInstallDetailsTextView.setVisibility(View.GONE);
+ 
+         if (uninstallStage.getAppIcon() != null) {
+             mAppSnippet.setVisibility(View.VISIBLE);
+@@ -185,6 +192,9 @@ public class UninstallationFragment extends DialogFragment {
+             mCustomMessageTextView.setVisibility(View.GONE);
+         }
+ 
++        // Show the package details
++        showUninstallDetails(uninstallStage);
++
+         // Set keep data information
+         long appDataSize = uninstallStage.getAppDataSize();
+         if (appDataSize != 0) {
+@@ -221,4 +231,29 @@ public class UninstallationFragment extends DialogFragment {
+             });
+         }
+     }
++
++    /**
++     * Fill in the block of package details that is shown underneath the confirmation message.
++     */
++    private void showUninstallDetails(@NonNull UninstallUserActionRequired uninstallStage) {
++        final String packageName = uninstallStage.getTargetAppInfo().packageName;
++        if (packageName == null) {
++            mInstallDetailsTextView.setVisibility(View.GONE);
++            return;
++        }
++
++        final Context context = requireContext();
++        final PackageInfo packageInfo =
++                InstallDetailsUtil.getInstalledPackageInfo(context, packageName);
++        if (packageInfo == null) {
++            mInstallDetailsTextView.setVisibility(View.GONE);
++            return;
++        }
++
++        final UserHandle targetUser = uninstallStage.getTargetUser() != null
++                ? uninstallStage.getTargetUser() : Process.myUserHandle();
++        mInstallDetailsTextView.setText(InstallDetailsUtil.buildUninstallDetails(context,
++                packageInfo, targetUser));
++        mInstallDetailsTextView.setVisibility(View.VISIBLE);
++    }
+ }

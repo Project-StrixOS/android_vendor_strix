@@ -1,0 +1,213 @@
+diff --git a/res/values-zh-rCN/strings.xml b/res/values-zh-rCN/strings.xml
+index 493a41b66eb..db464e986ae 100644
+--- a/res/values-zh-rCN/strings.xml
++++ b/res/values-zh-rCN/strings.xml
+@@ -2067,6 +2067,17 @@
+     <string name="app_install_details_title" msgid="7783556181897142187">"应用详情"</string>
+     <string name="app_install_details_summary" msgid="2013043219249992373">"应用安装来源：<xliff:g id="APP_STORE">%1$s</xliff:g>"</string>
+     <string name="app_install_details_different_initiating_package_summary" msgid="6093306593167176688">"应用安装来源：<xliff:g id="APP_STORE1">%1$s</xliff:g>（通过<xliff:g id="APP_STORE2">%2$s</xliff:g>）"</string>
++    <string name="app_package_info_group_title">"软件包信息"</string>
++    <string name="app_package_name_title">"包名"</string>
++    <string name="app_package_name_copied">"包名已复制"</string>
++    <string name="app_version_title">"版本"</string>
++    <string name="app_version_summary"><xliff:g id="version_name" example="1.2.3">%1$s</xliff:g>（<xliff:g id="version_code" example="10203">%2$d</xliff:g>）</string>
++    <string name="app_sdk_title">"SDK"</string>
++    <string name="app_sdk_summary">"目标：<xliff:g id="target_sdk" example="35">%1$d</xliff:g>，最低：<xliff:g id="min_sdk" example="24">%2$d</xliff:g>"</string>
++    <string name="app_install_date_title">"安装日期"</string>
++    <string name="app_update_date_title">"更新日期"</string>
++    <string name="app_install_source_title">"安装来源"</string>
++    <string name="app_uid_title">"UID"</string>
+     <string name="instant_app_details_summary" msgid="417197491598208216">"前往 <xliff:g id="APP_STORE">%1$s</xliff:g> 查看详细信息"</string>
+     <string name="app_ops_running" msgid="6127474473137428721">"正在运行"</string>
+     <string name="app_ops_never_used" msgid="9038133162371204506">"（从未使用）"</string>
+diff --git a/res/values/strings.xml b/res/values/strings.xml
+index f859a3c2f8f..c6799d231c3 100644
+--- a/res/values/strings.xml
++++ b/res/values/strings.xml
+@@ -4882,6 +4882,29 @@
+     <!-- Manage applications, individual application info screen, summary for the option which will trigger application info in its installer when the installing package and initiating package are different [CHAR_LIMIT=50] -->
+     <string name="app_install_details_different_initiating_package_summary">App installed from <xliff:g id="app_store1">%1$s</xliff:g> (via <xliff:g id="app_store2">%2$s</xliff:g>)</string>
+ 
++    <!-- Manage applications, individual application info screen, section heading for the package details block [CHAR_LIMIT=25] -->
++    <string name="app_package_info_group_title">Package info</string>
++    <!-- Manage applications, individual application info screen, label of the package name row. Tapping it copies the package name [CHAR_LIMIT=30] -->
++    <string name="app_package_name_title">Package name</string>
++    <!-- Manage applications, individual application info screen, toast shown after the package name is copied [CHAR_LIMIT=40] -->
++    <string name="app_package_name_copied">Package name copied</string>
++    <!-- Manage applications, individual application info screen, label of the version row [CHAR_LIMIT=30] -->
++    <string name="app_version_title">Version</string>
++    <!-- Manage applications, individual application info screen, version summary showing the version name and the internal version code -->
++    <string name="app_version_summary"><xliff:g id="version_name" example="1.2.3">%1$s</xliff:g> (<xliff:g id="version_code" example="10203">%2$d</xliff:g>)</string>
++    <!-- Manage applications, individual application info screen, label of the SDK row [CHAR_LIMIT=30] -->
++    <string name="app_sdk_title">SDK</string>
++    <!-- Manage applications, individual application info screen, SDK summary showing the target and minimum SDK versions -->
++    <string name="app_sdk_summary">Target: <xliff:g id="target_sdk" example="35">%1$d</xliff:g>, Minimum: <xliff:g id="min_sdk" example="24">%2$d</xliff:g></string>
++    <!-- Manage applications, individual application info screen, label of the install date row [CHAR_LIMIT=30] -->
++    <string name="app_install_date_title">Install date</string>
++    <!-- Manage applications, individual application info screen, label of the update date row [CHAR_LIMIT=30] -->
++    <string name="app_update_date_title">Update date</string>
++    <!-- Manage applications, individual application info screen, label of the install source row [CHAR_LIMIT=30] -->
++    <string name="app_install_source_title">Install source</string>
++    <!-- Manage applications, individual application info screen, label of the uid row [CHAR_LIMIT=30] -->
++    <string name="app_uid_title">UID</string>
++
+     <!-- Manage applications, individual application info screen, summary for the option which will trigger instant app info in it's installer [CHAR_LIMIT=50] -->
+     <string name="instant_app_details_summary">More info on <xliff:g id="app_store">%1$s</xliff:g></string>
+ 
+diff --git a/src/com/android/settings/spa/app/appinfo/AppInfoSettings.kt b/src/com/android/settings/spa/app/appinfo/AppInfoSettings.kt
+index b0990c18a46..10201f2907e 100644
+--- a/src/com/android/settings/spa/app/appinfo/AppInfoSettings.kt
++++ b/src/com/android/settings/spa/app/appinfo/AppInfoSettings.kt
+@@ -222,7 +222,7 @@ private fun AppInfoSettings(packageInfoPresenter: PackageInfoPresenter) {
+             AppInstallerInfoPreference(app)
+         }
+ 
+-        appInfoProvider.FooterAppVersion()
++        AppVersionDetailsBlock(packageInfo)
+     }
+ }
+ 
+diff --git a/src/com/android/settings/spa/app/appinfo/AppVersionDetailsBlock.kt b/src/com/android/settings/spa/app/appinfo/AppVersionDetailsBlock.kt
+new file mode 100644
+index 00000000000..4a8122c184b
+--- /dev/null
++++ b/src/com/android/settings/spa/app/appinfo/AppVersionDetailsBlock.kt
+@@ -0,0 +1,138 @@
++/*
++ * Copyright (C) 2026 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package com.android.settings.spa.app.appinfo
++
++import android.content.ClipData
++import android.content.ClipboardManager
++import android.content.Context
++import android.content.pm.PackageInfo
++import android.widget.Toast
++import androidx.compose.runtime.Composable
++import androidx.compose.runtime.getValue
++import androidx.compose.runtime.produceState
++import androidx.compose.runtime.remember
++import androidx.compose.ui.platform.LocalContext
++import androidx.compose.ui.res.stringResource
++import com.android.settings.R
++import com.android.settings.Utils
++import com.android.settings.applications.AppStoreUtil
++import com.android.settingslib.spa.widget.preference.Preference
++import com.android.settingslib.spa.widget.preference.PreferenceModel
++import com.android.settingslib.spa.widget.ui.Category
++import com.android.settingslib.spaprivileged.framework.common.asUser
++import com.android.settingslib.spaprivileged.model.app.userHandle
++import java.text.DateFormat
++import java.util.Date
++import kotlinx.coroutines.Dispatchers
++import kotlinx.coroutines.withContext
++
++/**
++ * A [Category] block showing the details of the package: package name, version, SDK, install date,
++ * update date, install source and user id.
++ *
++ * Tapping the package name copies it to the clipboard.
++ */
++@Composable
++fun AppVersionDetailsBlock(packageInfo: PackageInfo) {
++    val context = LocalContext.current
++    val app = packageInfo.applicationInfo ?: return
++    val unknown = stringResource(R.string.unknown)
++    val dateFormat = remember { DateFormat.getDateInstance(DateFormat.MEDIUM) }
++
++    val installSource by produceState(initialValue = unknown, key1 = app.packageName) {
++        value = withContext(Dispatchers.IO) {
++            val userContext = context.asUser(app.userHandle)
++            val installerPackage =
++                AppStoreUtil.getInstallerPackageNameAndInstallSourceInfo(
++                    userContext,
++                    app.packageName,
++                ).first
++            if (installerPackage == null) {
++                unknown
++            } else {
++                (Utils.getApplicationLabel(context, installerPackage)
++                    ?: installerPackage).toString()
++            }
++        }
++    }
++
++    val versionSummary = stringResource(
++        R.string.app_version_summary,
++        packageInfo.versionName ?: unknown,
++        packageInfo.longVersionCode,
++    )
++    val sdkSummary = stringResource(
++        R.string.app_sdk_summary,
++        app.targetSdkVersion,
++        app.minSdkVersion,
++    )
++    val installDate = dateFormat.format(Date(packageInfo.firstInstallTime))
++    val updateDate = dateFormat.format(Date(packageInfo.lastUpdateTime))
++    val uidSummary = app.uid.toString()
++
++    Category(title = stringResource(R.string.app_package_info_group_title)) {
++        Preference(
++            object : PreferenceModel {
++                override val title = stringResource(R.string.app_package_name_title)
++                override val summary = { app.packageName }
++                override val onClick = { copyPackageName(context, app.packageName) }
++            },
++        )
++        Preference(
++            object : PreferenceModel {
++                override val title = stringResource(R.string.app_version_title)
++                override val summary = { versionSummary }
++            },
++        )
++        Preference(
++            object : PreferenceModel {
++                override val title = stringResource(R.string.app_sdk_title)
++                override val summary = { sdkSummary }
++            },
++        )
++        Preference(
++            object : PreferenceModel {
++                override val title = stringResource(R.string.app_install_date_title)
++                override val summary = { installDate }
++            },
++        )
++        Preference(
++            object : PreferenceModel {
++                override val title = stringResource(R.string.app_update_date_title)
++                override val summary = { updateDate }
++            },
++        )
++        Preference(
++            object : PreferenceModel {
++                override val title = stringResource(R.string.app_install_source_title)
++                override val summary = { installSource }
++            },
++        )
++        Preference(
++            object : PreferenceModel {
++                override val title = stringResource(R.string.app_uid_title)
++                override val summary = { uidSummary }
++            },
++        )
++    }
++}
++
++private fun copyPackageName(context: Context, packageName: String) {
++    val clipboard = context.getSystemService(ClipboardManager::class.java) ?: return
++    clipboard.setPrimaryClip(ClipData.newPlainText(packageName, packageName))
++    Toast.makeText(context, R.string.app_package_name_copied, Toast.LENGTH_SHORT).show()
++}

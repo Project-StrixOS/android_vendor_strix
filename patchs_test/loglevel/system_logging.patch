@@ -1,0 +1,135 @@
+diff --git a/liblog/logger_write.cpp b/liblog/logger_write.cpp
+index 2e6b9e86..31f1808d 100644
+--- a/liblog/logger_write.cpp
++++ b/liblog/logger_write.cpp
+@@ -374,6 +374,14 @@ void __android_log_write_log_message(__android_log_message* log_message) {
+   }
+ #endif
+ 
++  // Central gate for every text log: honour sys.strix.log_level, the per-tag log.tag.*
++  // properties and __android_log_set_minimum_priority(). Callers that need the -EPERM answer
++  // (__android_log_buf_write and friends) check before getting here; they are unaffected.
++  if (!__android_log_is_loggable(log_message->priority, log_message->tag,
++                                 ANDROID_LOG_VERBOSE)) {
++    return;
++  }
++
+   logger_function(log_message);
+ }
+ 
+diff --git a/liblog/properties.cpp b/liblog/properties.cpp
+index f5ce5efb..61ca6814 100644
+--- a/liblog/properties.cpp
++++ b/liblog/properties.cpp
+@@ -91,6 +91,76 @@ static void refresh_cache(cached_char* cache, const char* key) {
+   }
+ }
+ 
++struct cached_int {
++  const prop_info* pinfo;
++  uint32_t serial;
++  int value;
++};
++
++static int check_cache(cached_int* cache) {
++  return cache->pinfo && __system_property_serial(cache->pinfo) != cache->serial;
++}
++
++// Reads a decimal android_LogPriority out of a property. Anything that is not a whole number in
++// [ANDROID_LOG_VERBOSE, ANDROID_LOG_SILENT] reads back as -1, so callers fall back to their own
++// default instead of guessing.
++static void refresh_cache(cached_int* cache, const char* key) {
++  if (!cache->pinfo) {
++    cache->pinfo = __system_property_find(key);
++    if (!cache->pinfo) {
++      cache->value = -1;
++      return;
++    }
++  }
++  cache->serial = __system_property_serial(cache->pinfo);
++
++  char buf[PROP_VALUE_MAX] __attribute__((__uninitialized__));
++  __system_property_read(cache->pinfo, 0, buf);
++
++  char* end;
++  long value = strtol(buf, &end, 10);
++  cache->value =
++      (end == buf || *end != '\0' || value < ANDROID_LOG_VERBOSE || value > ANDROID_LOG_SILENT)
++          ? -1
++          : static_cast<int>(value);
++}
++
++/*
++ * sys.strix.log_level is the system wide log level written by the Settings app. It holds the
++ * android_LogPriority of the lowest level that is still emitted (ANDROID_LOG_VERBOSE through
++ * ANDROID_LOG_FATAL), plus ANDROID_LOG_SILENT to stop logging altogether. Returns -1 when the
++ * property has not been written or holds a value outside that range.
++ *
++ * The cache is invalidated on __system_property_area_serial() as well as on the property's own
++ * serial, because __system_property_add() bumps the area serial: that is what lets us notice the
++ * property being created long after the first read.
++ */
++static int __android_log_system_level() {
++  static pthread_mutex_t level_lock = PTHREAD_MUTEX_INITIALIZER;
++  static cached_int level_cache = {nullptr, 0xFFFFFFFF, -1};
++  static uint32_t level_serial = 0;
++
++  if (pthread_mutex_trylock(&level_lock)) {
++    /* We are willing to accept some race in this context */
++    return level_cache.value;
++  }
++
++  int change_detected = check_cache(&level_cache);
++  uint32_t current_serial = __system_property_area_serial();
++  if (current_serial != level_serial) {
++    change_detected = 1;
++  }
++  if (change_detected) {
++    refresh_cache(&level_cache, "sys.strix.log_level");
++    level_serial = current_serial;
++  }
++
++  int value = level_cache.value;
++  pthread_mutex_unlock(&level_lock);
++
++  return value;
++}
++
+ static int __android_log_level(const char* tag, size_t tag_len) {
+   if (tag == nullptr || tag_len == 0) {
+     auto& tag_string = GetDefaultTag();
+@@ -247,16 +317,29 @@ static int __android_log_level(const char* tag, size_t tag_len) {
+ int __android_log_is_loggable_len(int prio, const char* tag, size_t len, int default_prio) {
+   int minimum_log_priority = __android_log_get_minimum_priority();
+   int property_log_level = __android_log_level(tag, len);
++  int system_log_level = __android_log_system_level();
+ 
++  // The per-tag properties and __android_log_set_minimum_priority() keep their historical
++  // relationship: the lowest of the two wins, as documented for this function.
++  int threshold = -1;
+   if (property_log_level >= 0 && minimum_log_priority != ANDROID_LOG_DEFAULT) {
+-    return prio >= std::min(property_log_level, minimum_log_priority);
++    threshold = std::min(property_log_level, minimum_log_priority);
+   } else if (property_log_level >= 0) {
+-    return prio >= property_log_level;
++    threshold = property_log_level;
+   } else if (minimum_log_priority != ANDROID_LOG_DEFAULT) {
+-    return prio >= minimum_log_priority;
+-  } else {
+-    return prio >= default_prio;
++    threshold = minimum_log_priority;
++  }
++
++  // sys.strix.log_level is the system wide authority. The other sources may only tighten it,
++  // never loosen it, so they take over solely when they ask for a strictly higher (more
++  // restrictive) level than the one already in effect. This makes SILENT(8) absolute, while still
++  // letting a log.tag.<tag> property raise the bar for a single tag above the configured level.
++  // default_prio only applies when nothing at all has been configured.
++  if (system_log_level >= 0 && (threshold < 0 || system_log_level > threshold)) {
++    threshold = system_log_level;
+   }
++
++  return prio >= (threshold < 0 ? default_prio : threshold);
+ }
+ 
+ int __android_log_is_loggable(int prio, const char* tag, int default_prio) {
