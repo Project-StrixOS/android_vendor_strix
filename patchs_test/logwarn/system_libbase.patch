@@ -1,0 +1,35 @@
+diff --git a/logging.cpp b/logging.cpp
+index 9204c0c..a1abe98 100644
+--- a/logging.cpp
++++ b/logging.cpp
+@@ -300,7 +300,9 @@ void DefaultAborter(const char* abort_message) {
+ static void LogdLogChunk(LogId id, LogSeverity severity, const char* tag, const char* message) {
+   int32_t lg_id = LogIdTolog_id_t(id);
+   int32_t priority = LogSeverityToPriority(severity);
+-
++  if (priority < ANDROID_LOG_WARN) {
++      return;
++  }
+   __android_log_message log_message = {sizeof(__android_log_message),     lg_id, priority, tag,
+                                        static_cast<const char*>(nullptr), 0,     message};
+   __android_log_logd_logger(&log_message);
+@@ -490,6 +492,9 @@ std::ostream& LogMessage::stream() {
+ void LogMessage::LogLine(const char* file, unsigned int line, LogSeverity severity, const char* tag,
+                          const char* message) {
+   int32_t priority = LogSeverityToPriority(severity);
++  if (priority < ANDROID_LOG_WARN) {
++      return;
++  }
+   __android_log_message log_message = {
+       sizeof(__android_log_message), LOG_ID_DEFAULT, priority, tag, file, line, message};
+   __android_log_write_log_message(&log_message);
+@@ -501,6 +506,9 @@ LogSeverity GetMinimumLogSeverity() {
+ 
+ bool ShouldLog(LogSeverity severity, const char* tag) {
+   int32_t priority = LogSeverityToPriority(severity);
++  if (priority < ANDROID_LOG_WARN) {
++      return false;
++  }
+   return __android_log_is_loggable(priority, tag, ANDROID_LOG_INFO);
+ }
+ 
